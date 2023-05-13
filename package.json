@@ -1,0 +1,7 @@
+{
+  "name": "CS209_Java2_Project_23Spring",
+  "version": "1.0.0",
+  "dependencies": {
+    "echarts": "^5.4.2"
+  }
+}

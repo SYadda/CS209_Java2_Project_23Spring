@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Java2 Project Demo</title>
     <!--  Import echarts lib by CDN, you can also import from local files  -->
     <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!--  Import the data files  -->
     <script src='../js/wordcloud-demo.js'></script>
     <script src='../js/piechart-demo.js'></script>
+    <script src = '../js/Smoothed_line.js'></script>
 </head>
 <body style="text-align: center">
 <h1>Rust Tag</h1>
@@ -20,11 +22,21 @@
     <div style="width: 50%;height: 100%">
         <div id="piechart" style="height: 100%;width: 100%"></div>
     </div>
+    <div style="width: 50%;height: 100%">
+        <div id="soomthedline" style="height: 100%;width: 100%"></div>
+    </div>
 </div>
+<input id="nums" type="hidden"  th:value="${shuzu}">
 </body>
+
 
 <script>
 <!--  echarts configuration  -->
+
+    let val = $("#nums").val();
+    let shuzu = JSON.parse(val);
+
+
     let wordcloud = echarts.init(document.getElementById('wordcloud'));
     let wordcloudData = [];
     for (const key in wordcloudRaw) {
@@ -141,6 +153,30 @@
         ]
     };
     piechart.setOption(pieOption);
+
+
+    var chartDom = document.getElementById('soomthedline');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: shuzu,
+                type: 'line',
+                smooth: true
+            }
+        ]
+    };
+    myChart.setOption(option);
+
 </script>
 
 </html>

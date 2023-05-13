@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+</head>
+<body>
+<div style="width: 100%;height: 60vh;display: flex">
+  <div style="width: 50%;height: 100%">
+    <div id="acTimeDis" style="height: 100%;width: 100%"></div>
+  </div>
+  <div style="width: 50%;height: 100%">
+    <div id="PercentOfAc" style="height: 100%;width: 100%"></div>
+  </div>
+  <div style="width: 50%;height: 100%">
+    <div id="countVoteMore" style="height: 100%;width: 100%"></div>
+  </div>
+
+</div>
+<input id="acT" type="hidden" th:value="${acTimeDis}">
+<input id="vote" type="hidden" th:value="${countVoteMore}">
+<input id="Per" type="hidden" th:value="${PercentOfAc}">
+
+</body>
+
+<script>
+  let json;
+  let xRom;
+  let yRom;
+
+  json = $('#acT').val();
+  xRom = [];
+  yRom = [];
+  window.alert(json)
+  json = JSON.parse(json);
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  let acTimeDischartDom = document.getElementById('acTimeDis');
+  let acTimeDisChart = echarts.init(acTimeDischartDom);
+  option = {
+    xAxis: {
+      type: 'category',
+      boundaryGap: false,
+      data: xRom
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        data: yRom,
+        type: 'line',
+        areaStyle: {}
+      }
+    ]
+  };
+  acTimeDisChart.setOption(option);
+
+  json = $('#vote').val();
+  let countVoteMorechartDom = document.getElementById("countVoteMore");
+  let countVoteMoreChart = echarts.init(countVoteMorechartDom);
+  option = {
+    title: {
+      text: 'Referer of a Website',
+      subtext: 'Fake Data',
+      left: 'center'
+    },
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left'
+    },
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          {
+            value: json, name: '含有 non-accepted answer 的 upvote 数高于 accepted \n'
+                + 'answer 的问题的百分比(' + json * 100 + '%)'
+          },
+          {
+            value: 1 - json, name: '不含有 non-accepted answer 的 upvote 数高于 accepted \n'
+                + 'answer 的问题的百分比(' + (1 - json) * 100 + '%)'
+          },
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  };
+  countVoteMoreChart.setOption(option);
+
+
+  json = $('#Per').val();
+  let PercentOfAcchartDom = document.getElementById("PercentOfAc");
+  let PercentOfAcChart = echarts.init(PercentOfAcchartDom);
+  option = {
+    title: {
+      text: 'Referer of a Website',
+      subtext: 'Fake Data',
+      left: 'center'
+    },
+    tooltip: {
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left'
+    },
+    series: [
+      {
+        name: 'Access From',
+        type: 'pie',
+        radius: '50%',
+        data: [
+          {
+            value: json, name: '已ac的占比(' + json * 100 + '%)'
+          },
+          {
+            value: 1 - json, name: '没ac的占比(' + (1 - json) * 100 + '%)'
+          },
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }
+    ]
+  };
+  PercentOfAcChart.setOption(option);
+</script>
+
+>
+</html>

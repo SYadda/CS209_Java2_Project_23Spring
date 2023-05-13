@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+</head>
+<body>
+<div style="width: 100%;height: 60vh;display: flex">
+  <div style="width: 50%;height: 100%">
+    <div id="tagsMapMostAppear" style="height: 100%;width: 100%"></div>
+    <div id="tagsMapMaxView" style="height: 100%;width: 100%"></div>
+    <div id="tagsMapMaxUp" style="height: 100%;width: 100%"></div>
+  </div>
+  </div>
+  <input id="appear" type="hidden" th:value="${tagsMapMostAppear}">
+  <input id="view" type="hidden" th:value="${tagsMapMaxView}">
+  <input id="maxup" type="hidden" th:value="${tagsMapMaxUp}">
+
+</body>
+
+<script>
+  let json;
+  let xRow;
+  let yRow;
+  json = $('#appear').val();
+  xRow = [];
+  yRow = [];
+  let tagsMapMostAppearDom = document.getElementById('tagsMapMostAppear');
+  let tagsMapMostAppearChart = echarts.init(tagsMapMostAppearDom);
+  json = JSON.parse(json);
+  for (const key in json){
+    xRow[xRow.length] = key;
+    yRow[yRow.length] = json[key];
+  }
+
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: xRow,
+        axisLabel:{
+          interval: 0,//横轴信息全部显示
+          rotate: -45, //倾斜度 -90 至 90 默认为0
+          margin: 5, //刻度标签与轴线之间的距离
+        },
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'Direct',
+        type: 'bar',
+        barWidth: '60%',
+        data: yRow
+      }
+    ]
+  };
+
+  tagsMapMostAppearChart.setOption(option);
+
+  json = $('#view').val();
+  xRow = [];
+  yRow = [];
+  let tagsMapMaxViewDom = document.getElementById('tagsMapMaxView');
+  let tagsMapMaxViewChart = echarts.init(tagsMapMaxViewDom);
+  json = JSON.parse(json);
+  for (const key in json){
+    xRow[xRow.length] = key;
+    yRow[yRow.length] = json[key];
+  }
+
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: xRow,
+        axisLabel:{
+          interval: 0,//横轴信息全部显示
+          rotate: -45, //倾斜度 -90 至 90 默认为0
+          margin: 5, //刻度标签与轴线之间的距离
+        },
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'Direct',
+        type: 'bar',
+        barWidth: '60%',
+        data: yRow
+      }
+    ]
+  };
+
+  tagsMapMaxViewChart.setOption(option);
+
+
+
+  json = $('#maxup').val();
+  xRow = [];
+  yRow = [];
+  let tagsMapMaxUpDom = document.getElementById('tagsMapMaxUp');
+  let tagsMapMaxUpChart = echarts.init(tagsMapMaxUpDom);
+  json = JSON.parse(json);
+  for (const key in json){
+    xRow[xRow.length] = key;
+    yRow[yRow.length] = json[key];
+  }
+
+  option = {
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    xAxis: [
+      {
+        type: 'category',
+        data: xRow,
+        axisLabel:{
+          interval: 0,//横轴信息全部显示
+          rotate: -45, //倾斜度 -90 至 90 默认为0
+          margin: 5, //刻度标签与轴线之间的距离
+        },
+        axisTick: {
+          alignWithLabel: true
+        }
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'Direct',
+        type: 'bar',
+        barWidth: '60%',
+        data: yRow
+      }
+    ]
+  };
+
+  tagsMapMaxUpChart.setOption(option);
+
+
+</script>
+</html>
