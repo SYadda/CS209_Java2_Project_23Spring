@@ -256,13 +256,15 @@ public class DemoController {
         questions.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
             List<Owner> owners = new ArrayList<>();
             owners.add(ownerRepository.findAllByAccountid(t.getAccount_id()));
-            answerRepository.findAllByQuestionid(t.getQuestion_id()).stream().filter(e -> e.getAccount_id() != null).forEach(e -> {
-                owners.add(ownerRepository.findAllByAccountid(e.getAccount_id()));
-                List<Comment> comments = commentRepository.findAllByPostid((long) e.getAccount_id());
-                comments.forEach(s -> {
-                    owners.add(ownerRepository.findAllByAccountid(s.getAccount_id()));
+            answerRepository.findAllByQuestionid(t.getQuestion_id()).stream()
+                .filter(e -> e.getAccount_id() != null).forEach(e -> {
+                    owners.add(ownerRepository.findAllByAccountid(e.getAccount_id()));
+                    List<Comment> comments = commentRepository.findAllByPostid(
+                        (long) e.getAccount_id());
+                    comments.forEach(s -> {
+                        owners.add(ownerRepository.findAllByAccountid(s.getAccount_id()));
+                    });
                 });
-            });
             long count = owners.stream().filter(e -> e.getUser_id() != null)
                 .filter(distinctByKey(Owner::getUser_id)).count();
             if (q1.containsKey(count)) {
@@ -272,10 +274,30 @@ public class DemoController {
             }
         });
         System.out.println(q1);
+        //q3
+        TreeMap<Integer, Integer> q3 = new TreeMap<>();
+        List<Comment> comments = commentRepository.findAll();
+        comments.stream().filter(t -> t.getAccount_id() != null && t.account_id != -1)
+            .forEach(t -> {
+                if (q3.containsKey(t.getAccount_id())) {
+                    q3.put(t.getAccount_id(), q3.get(t.getAccount_id()) + 1);
+                } else {
+                    q3.put(t.getAccount_id(), 1);
+                }
+            });
+        List<Answer> answers = answerRepository.findAll();
+        answers.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
+            if (q3.containsKey(t.getAccount_id())) {
+                q3.put(t.getAccount_id(), q3.get(t.getAccount_id()) + 1);
+            } else {
+                q3.put(t.getAccount_id(), 1);
+            }
+        });
 
-
-
-
+        List<String> q3a = q3.entrySet().stream()
+            .sorted((o1, o2) -> o2.getValue() - o1.getValue()).limit(1)
+            .map(s -> ownerRepository.findAllByAccountid(s.getKey()).getDisplay_name()).toList();
+        System.out.println(q3a.get(0));
         return null;
     }
 
