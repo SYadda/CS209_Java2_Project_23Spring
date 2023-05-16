@@ -3,9 +3,12 @@ package cse.java2.project.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cse.java2.project.model.Answer;
+import cse.java2.project.model.Comment;
+import cse.java2.project.model.Owner;
 import cse.java2.project.model.Question;
-import cse.java2.project.model.Question.answer;
 import cse.java2.project.repository.AnswerRepository;
+import cse.java2.project.repository.CommentRepository;
+import cse.java2.project.repository.OwnerRepository;
 import cse.java2.project.serive.QuestionService;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +16,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,6 +35,8 @@ public class DemoController {
     //调用数据库
     QuestionService questionService;
     private final AnswerRepository answerRepository;
+    private final OwnerRepository ownerRepository;
+    private final CommentRepository commentRepository;
 
     /**
      * This method is called when the user requests the root URL ("/") or "/demo". In this demo, you
@@ -196,8 +205,9 @@ public class DemoController {
 
         ArrayList<Long> longs = new ArrayList<>();
         questions.stream().filter(Question::getHaveAcceptedAns).forEach(t -> {
-            Long time = questionService.findByAnswer_id(t.getAccepted_answer_id()).getCreation_date()
-                - t.getCreation_date();
+            Long time =
+                questionService.findByAnswer_id(t.getAccepted_answer_id()).getCreation_date()
+                    - t.getCreation_date();
             longs.add(time);
         });
         //被ac用时
@@ -232,28 +242,59 @@ public class DemoController {
             }
 
         });
-        System.out.println(linkedHashMap);
-        System.out.println((double) countVoteMore /(double) count);
         model.addAttribute("PercentOfAc", (double) count / (double) questions.size());
-        model.addAttribute("countVoteMore", (double) countVoteMore /(double) count);
+        model.addAttribute("countVoteMore", (double) countVoteMore / (double) count);
         model.addAttribute("acTimeDis", objectMapper.writeValueAsString(linkedHashMap));
-
+        System.out.println(getThread(null));
         return "acc";
     }
 
 
     public String getThread(Model model) {
+        List<Question> questions = questionService.findAllQuestion();
+        TreeMap<Long, Long> q1 = new TreeMap<>();
+        questions.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
+            List<Owner> owners = new ArrayList<>();
+            owners.add(ownerRepository.findAllByAccountid(t.getAccount_id()));
+            answerRepository.findAllByQuestionid(t.getQuestion_id()).stream().filter(e -> e.getAccount_id() != null).forEach(e -> {
+                owners.add(ownerRepository.findAllByAccountid(e.getAccount_id()));
+                List<Comment> comments = commentRepository.findAllByPostid((long) e.getAccount_id());
+                comments.forEach(s -> {
+                    owners.add(ownerRepository.findAllByAccountid(s.getAccount_id()));
+                });
+            });
+            long count = owners.stream().filter(e -> e.getUser_id() != null)
+                .filter(distinctByKey(Owner::getUser_id)).count();
+            if (q1.containsKey(count)) {
+                q1.put(count, q1.get(count) + 1);
+            } else {
+                q1.put(count, 1L);
+            }
+        });
+        System.out.println(q1);
+
+
 
 
         return null;
     }
 
 
+    private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
+        Set<Object> seen = ConcurrentHashMap.newKeySet();
+        return t -> seen.add(keyExtractor.apply(t));
+    }
+
+
     @Autowired
     public DemoController(QuestionService questionService,
-        AnswerRepository answerRepository) {
+        AnswerRepository answerRepository,
+        OwnerRepository ownerRepository,
+        CommentRepository commentRepository) {
         this.questionService = questionService;
         this.answerRepository = answerRepository;
+        this.ownerRepository = ownerRepository;
+        this.commentRepository = commentRepository;
     }
 
 

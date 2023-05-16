@@ -1,5 +1,6 @@
 package cse.java2.project.model;
 
+import com.google.gson.annotations.SerializedName;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +20,15 @@ public class Owner {
     Integer id;
 
 
-    Integer account_id;
+
+    @SerializedName("account_id")
+    Integer accountid;
     @Column(unique = true)
     Long user_id;
     String display_name;
 
     public Owner(Integer account_id, Long user_id, String display_name) {
-        this.account_id = account_id;
+        this.accountid = account_id;
         this.user_id = user_id;
         this.display_name = display_name;
     }
@@ -39,7 +42,7 @@ public class Owner {
     }
 
     public Integer getAccount_id() {
-        return account_id;
+        return accountid;
     }
 
     public Long getUser_id() {
@@ -54,7 +57,7 @@ public class Owner {
     public String toString() {
         return "Owner{" +
             "id=" + id +
-            ", account_id=" + account_id +
+            ", account_id=" + accountid +
             ", user_id=" + user_id +
             ", display_name='" + display_name + '\'' +
             '}';

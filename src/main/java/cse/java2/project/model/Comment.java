@@ -1,6 +1,7 @@
 package cse.java2.project.model;
 
 
+import com.google.gson.annotations.SerializedName;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,7 +14,9 @@ public class Comment {
 
     @Transient
     Owner owner;
-    Long post_id;
+
+    @SerializedName("post_id")
+    Long postid;
 
     String post_type;
     @Id
@@ -25,19 +28,47 @@ public class Comment {
     @Column(length = 40000)
     String body;
 
-    Integer account_id;
+    public Integer account_id;
 
     public Comment(Owner owner, Long post_id, Long comment_id, String body_markdown, String body, String post_type) {
         this.owner = owner;
-        this.post_id = post_id;
+        this.postid = post_id;
         this.comment_id = comment_id;
         this.body_markdown = body_markdown;
         this.body = body;
-        this.account_id = owner.account_id;
+        this.account_id = owner.accountid;
         this.post_type = post_type;
     }
 
     public Comment() {
 
+    }
+
+    public Owner getOwner() {
+        return owner;
+    }
+
+    public Long getPostid() {
+        return postid;
+    }
+
+    public String getPost_type() {
+        return post_type;
+    }
+
+    public Long getComment_id() {
+        return comment_id;
+    }
+
+    public String getBody_markdown() {
+        return body_markdown;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public Integer getAccount_id() {
+        return account_id;
     }
 }
