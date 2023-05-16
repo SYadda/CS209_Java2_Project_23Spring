@@ -22,32 +22,34 @@ public class Questions {
 
     public static List<Question> useAPI() {
         ArrayList<Question> questionArrayList = new ArrayList<>();
-        try {
-            String firstPort = "https://api.stackexchange.com/2.3/questions?page=1&pagesize=100&order=desc&sort=activity&tagged=java&site=stackoverflow&filter=!19uZVHXWOfxR(tG--Pd9Y-(t2k6sGkEtYb5KA.Zla4GfkH";
-            String key = "&key=4RJi5zpqsZDDEAyx1ab73g((";
-            URL url = new URL(firstPort + key);
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setRequestProperty("Accept-Encoding", "gzip");
-            BufferedReader in = new BufferedReader(
-                new InputStreamReader(new GZIPInputStream(con.getInputStream()),
-                    StandardCharsets.UTF_8));
-            String inputLine;
-            StringBuilder content = new StringBuilder();
-            while ((inputLine = in.readLine()) != null) {
-                System.out.println(inputLine);
-                content.append(inputLine);
+        for (int i = 1; i < 6; i++) {
+            try {
+                String firstPort = "https://api.stackexchange.com/2.3/questions?page=" + (i * 13)+ "&pagesize=100&order=desc&sort=activity&tagged=java&site=stackoverflow&filter=!-(Gl*W886mHqa1yKMjkmokfrrKEeqI10ZM0ujZrmyV)O*bxT4JRO2(4at*";
+                String key = "&key=4RJi5zpqsZDDEAyx1ab73g((";
+                URL url = new URL(firstPort + key);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Accept-Encoding", "gzip");
+                BufferedReader in = new BufferedReader(
+                    new InputStreamReader(new GZIPInputStream(con.getInputStream()),
+                        StandardCharsets.UTF_8));
+                String inputLine;
+                StringBuilder content = new StringBuilder();
+                while ((inputLine = in.readLine()) != null) {
+                    content.append(inputLine);
+                }
+                in.close();
+                Gson gson = new Gson();
+                Questions questions = gson.fromJson(content.toString(), Questions.class);
+                questionArrayList.addAll(questions.items);
+                //System.out.println(content.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            in.close();
-            Gson gson = new Gson();
-            Questions questions = gson.fromJson(content.toString(), Questions.class);
-            questionArrayList = questions.items;
-            System.out.println(questions.items.size());
-            //System.out.println(content.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
         return questionArrayList;
     }
+
 
 }

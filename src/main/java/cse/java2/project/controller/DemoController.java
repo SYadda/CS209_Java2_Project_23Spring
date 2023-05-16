@@ -164,7 +164,7 @@ public class DemoController {
 
         long beAns = questions.stream().filter(Question::getIs_answered).count();
         long totalQ = questions.size();
-        double beAnsP = ((double) beAns / totalQ) * 100;
+        double beAnsP = ((double) beAns / (double) totalQ) * 100;
         String beAnsS = String.format("be answered(%.2f", beAnsP) + "%)";
         String notBeAnsS = String.format("not be answered(%.2f", (100 - beAnsP)) + "%)";
         map.put(beAnsS, beAns);
@@ -183,7 +183,7 @@ public class DemoController {
             t -> {
                 Answer acAnswer = questionService.findByAnswer_id(t.getAccepted_answer_id());
                 AtomicBoolean result = new AtomicBoolean(false);
-                List<answer> answers = t.answers;
+                List<Answer> answers = answerRepository.findAllByQuestionid(t.getQuestion_id());
                 answers.forEach(e -> {
                     if (!Objects.equals(e.getAnswer_id(), acAnswer.getAnswer_id())
                         && e.getUp_vote_count() > acAnswer.getUp_vote_count()) {
@@ -233,11 +233,19 @@ public class DemoController {
 
         });
         System.out.println(linkedHashMap);
+        System.out.println((double) countVoteMore /(double) count);
         model.addAttribute("PercentOfAc", (double) count / (double) questions.size());
         model.addAttribute("countVoteMore", (double) countVoteMore /(double) count);
         model.addAttribute("acTimeDis", objectMapper.writeValueAsString(linkedHashMap));
 
         return "acc";
+    }
+
+
+    public String getThread(Model model) {
+
+
+        return null;
     }
 
 

@@ -1,21 +1,29 @@
 package cse.java2.project.model;
 
+import com.google.gson.annotations.SerializedName;
+import cse.java2.project.model.Question.answer.comments;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import org.hibernate.annotations.DynamicInsert;
 
 @Entity
 @Table
+@DynamicInsert
 public class Question {
 
     @Id
     @GeneratedValue
+    Integer id;
+
+    @Column(unique = true)
     public Long question_id;
     @ElementCollection
     List<String> tags;
@@ -23,10 +31,11 @@ public class Question {
     @Transient
     public owner owner;
 
-    Long account_id;
+    Integer account_id;
     Boolean is_answered;
 
-    Long down_vote_count;
+    @SerializedName(value = "down_vote_count")
+    Integer down_vote_count;
 
     Long up_vote_count;
 
@@ -43,8 +52,6 @@ public class Question {
     Long view_count;
 
 
-
-
     @Column(length = 40000)
     String body_markdown;
 
@@ -56,23 +63,25 @@ public class Question {
     @Transient
     public List<answer> answers = new ArrayList<>();
 
+    @Transient
+    public List<answer.comments> comments = new ArrayList<>();
+
     public void setOwnerAccountId() {
         this.account_id = owner.account_id;
     }
 
-    public void setHaveAcceptedAns(){
-        if (accepted_answer_id != null){
+    public void setHaveAcceptedAns() {
+        if (accepted_answer_id != null) {
             haveAcceptedAns = true;
         }
     }
 
     /**
-     * owner和answer只是作为临时存储用的,算是对数据库嵌套失败的妥协，反正基本上也就涉及到他俩独有的属性的时候需要给question
-     * 传一下，其他时间基本用不上
+     * owner和answer只是作为临时存储用的,算是对数据库嵌套失败的妥协，反正基本上也就涉及到他俩独有的属性的时候需要给question 传一下，其他时间基本用不上
      */
     public class owner {
 
-        Long account_id;
+        Integer account_id;
         Long user_id;
         String display_name;
 
@@ -95,6 +104,22 @@ public class Question {
 
         Long answer_id;
         Long question_id;
+
+        public List<comments> comments = new ArrayList<>();
+
+
+        String body_markdown;
+        String body;
+        String title;
+
+        public Answer getAnswer() {
+            return new Answer(owner.account_id, down_vote_count, up_vote_count, is_accepted,
+                creation_date, answer_id, question_id, body_markdown, body, title, comments);
+        }
+
+        public Owner getOwner() {
+            return new Owner(owner.account_id, owner.user_id, owner.display_name);
+        }
 
         public Long getDown_vote_count() {
             return down_vote_count;
@@ -132,17 +157,19 @@ public class Question {
             return title;
         }
 
-        String body_markdown;
-        String body;
-        String title;
+        public class comments {
 
-        public Answer getAnswer() {
-            return new Answer(owner.account_id, down_vote_count, up_vote_count, is_accepted,
-                creation_date, answer_id, question_id, body_markdown, body, title);
-        }
+            public owner owner;
+            Long post_id;
 
-        public Owner getOwner() {
-            return new Owner(owner.account_id, owner.user_id, owner.display_name);
+            String post_type;
+            Long comment_id;
+            String body_markdown;
+            String body;
+
+            public Comment getComment() {
+                return new Comment(owner.getOwner(), post_id, comment_id, body_markdown, body, post_type);
+            }
         }
     }
 
@@ -170,7 +197,7 @@ public class Question {
         return owner;
     }
 
-    public Long getAccount_id() {
+    public Integer getAccount_id() {
         return account_id;
     }
 
@@ -178,7 +205,7 @@ public class Question {
         return is_answered;
     }
 
-    public Long getDown_vote_count() {
+    public Integer getDown_vote_count() {
         return down_vote_count;
     }
 

@@ -19,7 +19,7 @@ public class Application {
     @Bean
     public CommandLineRunner commandLineRunner(QuestionService questionService){
         return args -> {
-            questionService.addAll();
+            //questionService.addAll();
         };
     }
 }
