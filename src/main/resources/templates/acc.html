@@ -60,21 +60,19 @@
   };
   acTimeDisChart.setOption(option);
 
-  json = $('#vote').val();
+  // json = $('#vote').val();
+  data1 = $('#vote').val() * 100
+
   let countVoteMorechartDom = document.getElementById("countVoteMore");
   let countVoteMoreChart = echarts.init(countVoteMorechartDom);
   option = {
     title: {
-      text: 'Referer of a Website',
-      subtext: 'Fake Data',
+      text: '获得最多点赞回答的分布情况',
+      subtext: '单位：百分比 %',
       left: 'center'
     },
     tooltip: {
       trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
     },
     series: [
       {
@@ -82,14 +80,10 @@
         type: 'pie',
         radius: '50%',
         data: [
-          {
-            value: json, name: '含有 non-accepted answer 的 upvote 数高于 accepted \n'
-                + 'answer 的问题的百分比(' + json * 100 + '%)'
-          },
-          {
-            value: 1 - json, name: '不含有 non-accepted answer 的 upvote 数高于 accepted \n'
-                + 'answer 的问题的百分比(' + (1 - json) * 100 + '%)'
-          },
+          {value: parseFloat(data1).toFixed(3), name: '其他回答\n' + parseFloat(data1).toFixed(2) + '%'},
+          // '含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
+          {value: parseFloat(100 - data1).toFixed(3), name: '被提问者采纳的回答\n' + parseFloat(100 - data1).toFixed(2) + '%'},
+          // '不含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
         ],
         emphasis: {
           itemStyle: {
