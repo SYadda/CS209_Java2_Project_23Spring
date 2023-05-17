@@ -7,7 +7,7 @@
   <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
 </head>
 <body>
-<div style="width: 100%;height: 60vh;display: flex">
+<div style="width: 100%;height: 60vh;display: flex; flex-wrap: wrap">
   <div style="width: 50%;height: 100%">
     <div id="acTimeDis" style="height: 100%;width: 100%"></div>
   </div>
@@ -26,13 +26,10 @@
 </body>
 
 <script>
-  let json;
-  let xRom;
-  let yRom;
+  let json = $('#acT').val();
+  let xRom = [];
+  let yRom = [];
 
-  json = $('#acT').val();
-  xRom = [];
-  yRom = [];
   window.alert(json)
   json = JSON.parse(json);
   for (const key in json) {
@@ -42,47 +39,54 @@
   let acTimeDischartDom = document.getElementById('acTimeDis');
   let acTimeDisChart = echarts.init(acTimeDischartDom);
   option = {
+    title: {
+      text: '被采纳回答的发布时间',
+      subtext: '自问题发布日期起计算',
+      left: 'center'
+    },
     xAxis: {
       type: 'category',
       boundaryGap: false,
-      data: xRom
+      data: xRom,
+      axisLabel: {interval: 0}
     },
     yAxis: {
-      type: 'value'
+      type: 'value',
+      axisLabel: {formatter: '{value} %'}
     },
     series: [
       {
         data: yRom,
         type: 'line',
-        areaStyle: {}
+        areaStyle: {},
+        label:{
+          show:true,
+          formatter: '{c}%'
+        }
       }
     ]
   };
   acTimeDisChart.setOption(option);
 
-  // json = $('#vote').val();
-  data1 = $('#vote').val() * 100
+  vote100 = $('#vote').val() * 100
 
   let countVoteMorechartDom = document.getElementById("countVoteMore");
   let countVoteMoreChart = echarts.init(countVoteMorechartDom);
   option = {
     title: {
-      text: '获得最多点赞回答的分布情况',
-      subtext: '单位：百分比 %',
+      text: '获得最多点赞的回答',
+      subtext: '在与java相关的全部问题中统计\n\n单位：百分比 %',
       left: 'center'
     },
-    tooltip: {
-      trigger: 'item'
-    },
+    tooltip: {trigger: 'item'},
     series: [
       {
-        name: 'Access From',
         type: 'pie',
         radius: '50%',
         data: [
-          {value: parseFloat(data1).toFixed(3), name: '其他回答\n' + parseFloat(data1).toFixed(2) + '%'},
+          {value: parseFloat(vote100).toFixed(3), name: '其他回答\n' + parseFloat(vote100).toFixed(2) + '%'},
           // '含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
-          {value: parseFloat(100 - data1).toFixed(3), name: '被提问者采纳的回答\n' + parseFloat(100 - data1).toFixed(2) + '%'},
+          {value: parseFloat(100 - vote100).toFixed(3), name: '被提问者采纳的回答\n' + parseFloat(100 - vote100).toFixed(2) + '%'},
           // '不含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
         ],
         emphasis: {
@@ -98,34 +102,23 @@
   countVoteMoreChart.setOption(option);
 
 
-  json = $('#Per').val();
+  per100 = $('#Per').val() * 100;
   let PercentOfAcchartDom = document.getElementById("PercentOfAc");
   let PercentOfAcChart = echarts.init(PercentOfAcchartDom);
   option = {
     title: {
-      text: 'Referer of a Website',
-      subtext: 'Fake Data',
+      text: '是否存在被提问者采纳的回答',
+      subtext: '在与java相关的全部问题中统计\n\n单位：百分比 %',
       left: 'center'
     },
-    tooltip: {
-      trigger: 'item'
-    },
-    legend: {
-      orient: 'vertical',
-      left: 'left'
-    },
+    tooltip: {trigger: 'item'},
     series: [
       {
-        name: 'Access From',
         type: 'pie',
         radius: '50%',
         data: [
-          {
-            value: json, name: '已ac的占比(' + json * 100 + '%)'
-          },
-          {
-            value: 1 - json, name: '没ac的占比(' + (1 - json) * 100 + '%)'
-          },
+          {value: parseFloat(per100).toFixed(3), name: '有回答被提问者采纳\n' + parseFloat(per100).toFixed(2) + '%'},
+          {value: parseFloat(100 - per100).toFixed(3), name: '无回答被提问者采纳\n' + parseFloat(100 - per100).toFixed(2) + '%'},
         ],
         emphasis: {
           itemStyle: {
@@ -139,6 +132,4 @@
   };
   PercentOfAcChart.setOption(option);
 </script>
-
->
 </html>
