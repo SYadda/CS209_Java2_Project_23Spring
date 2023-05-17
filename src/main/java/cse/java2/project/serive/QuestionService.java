@@ -83,14 +83,17 @@ public class QuestionService {
                         Collectors.toList()));
                 }
             });
-            commentRepository.saveAll(t.comments.stream().map(s -> s.getComment()).collect(
-                Collectors.toList()));
+            commentRepository.saveAll(
+                t.comments.stream().map(s -> s.getComment())
+                    .filter(comment -> comment.getAccount_id() != null).collect(
+                        Collectors.toList()));
         });
 
-        ownerRepository.saveAll(owners.stream().filter(t -> t.getUser_id() != null)
+        ownerRepository.saveAll(owners.stream().filter(t -> t.getUser_id() != null&&t.getAccount_id() != null)
             .filter(distinctByKey(Owner::getUser_id)).collect(
                 Collectors.toList()));
-        questionRepository.saveAll(questions);
+        questionRepository.saveAll(questions.stream().filter(t -> t.getAccount_id() != null).collect(
+            Collectors.toList()));
     }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
