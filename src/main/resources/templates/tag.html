@@ -8,10 +8,10 @@
 </head>
 <body>
 <div style="width: 100%;height: 60vh;display: flex">
-  <div style="width: 50%;height: 100%">
-    <div id="tagsMapMostAppear" style="height: 100%;width: 100%"></div>
-    <div id="tagsMapMaxView" style="height: 100%;width: 100%"></div>
-    <div id="tagsMapMaxUp" style="height: 100%;width: 100%"></div>
+  <div style="width: 50%;height: 100%; margin: 0 auto">
+    <div id="tagsMapMostAppear" style="height: 600px;width: 100%"></div>
+    <div id="tagsMapMaxView" style="height: 600px;width: 100%"></div>
+    <div id="tagsMapMaxUp" style="height: 600px;width: 100%"></div>
   </div>
   </div>
   <input id="appear" type="hidden" th:value="${tagsMapMostAppear}">
@@ -36,6 +36,10 @@
   }
 
   option = {
+    title: {
+      text: 'tag浏览次数排行',
+      left: 'center'
+    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -69,7 +73,9 @@
     ],
     series: [
       {
-        name: 'Direct',
+        realtimeSort: true,
+        label: {show: true, position: 'top'},
+        // name: 'Direct',
         type: 'bar',
         barWidth: '60%',
         data: yRow
@@ -91,6 +97,10 @@
   }
 
   option = {
+    title: {
+      text: 'tags组合浏览次数排行',
+      left: 'center'
+    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -124,7 +134,9 @@
     ],
     series: [
       {
-        name: 'Direct',
+        realtimeSort: true,
+        label: {show: true, position: 'top'},
+        // name: 'Direct',
         type: 'bar',
         barWidth: '60%',
         data: yRow
@@ -148,6 +160,10 @@
   }
 
   option = {
+    title: {
+      text: 'tags组合获得点赞数量排行',
+      left: 'center'
+    },
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -181,7 +197,9 @@
     ],
     series: [
       {
-        name: 'Direct',
+        realtimeSort: true,
+        label: {show: true, position: 'top'},
+        // name: 'Direct',
         type: 'bar',
         barWidth: '60%',
         data: yRow
