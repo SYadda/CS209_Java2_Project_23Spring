@@ -64,24 +64,26 @@ public class DemoController {
         LinkedHashMap<String, Integer> map = new LinkedHashMap<>();
         List<Question> questions = questionService.findAllQuestion();
         //添加饼状图的属性列表
-        map.put("<10", 0);
-        map.put("10<ans<20", 0);
-        map.put("20<ans<50", 0);
-        map.put("50<ans<100", 0);
-        map.put("100>ans", 0);
+        map.put("1个回答", 0);
+        map.put("2个回答", 0);
+        map.put("3~5个回答", 0);
+        map.put("6~10个回答", 0);
+        map.put(">10个回答", 0);
         //添加饼状图的值
         questions.forEach(t -> {
             Long ansCount = t.getAnswer_count();
-            if (ansCount <= 10) {
-                map.put("<10", map.get("<10") + 1);
-            } else if (ansCount <= 20) {
-                map.put("10<ans<20", map.get("10<ans<20") + 1);
-            } else if (ansCount <= 50) {
-                map.put("20<ans<50", map.get("20<ans<50") + 1);
-            } else if (ansCount <= 100) {
-                map.put("50<ans<100", map.get("50<ans<100") + 1);
-            } else {
-                map.put("100>ans", map.get("100>ans") + 1);
+            if (ansCount != 0) {
+                if (ansCount == 1) {
+                    map.put("1个回答", map.get("1个回答") + 1);
+                } else if (ansCount == 2) {
+                    map.put("2个回答", map.get("2个回答") + 1);
+                } else if (ansCount <= 5) {
+                    map.put("3~5个回答", map.get("3~5个回答") + 1);
+                } else if (ansCount <= 10) {
+                    map.put("6~10个回答", map.get("6~10个回答") + 1);
+                } else {
+                    map.put(">10个回答", map.get(">10个回答") + 1);
+                }
             }
         });
         //分布的饼状图
@@ -174,9 +176,9 @@ public class DemoController {
 
         long beAns = questions.stream().filter(Question::getIs_answered).count();
         long totalQ = questions.size();
-        double beAnsP = ((double) beAns / (double) totalQ) * 100;
-        String beAnsS = String.format("be answered(%.2f", beAnsP) + "%)";
-        String notBeAnsS = String.format("not be answered(%.2f", (100 - beAnsP)) + "%)";
+        // double beAnsP = ((double) beAns / (double) totalQ) * 100;
+        String beAnsS = "有回答";
+        String notBeAnsS = "没有回答";
         map.put(beAnsS, beAns);
         map.put(notBeAnsS, (totalQ - beAns));
         return map;
