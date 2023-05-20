@@ -215,31 +215,31 @@ public class DemoController {
         List<Long> ans = longs.stream().sorted().toList();
         LinkedHashMap<String, Long> linkedHashMap = new LinkedHashMap<>();
         //初始化各个阶段时间
-        linkedHashMap.put("1day", 0L);
-        linkedHashMap.put("7day", 0L);
-        linkedHashMap.put("15day", 0L);
-        linkedHashMap.put("30day", 0L);
-        linkedHashMap.put("90day", 0L);
-        linkedHashMap.put("180day", 0L);
-        linkedHashMap.put("365day", 0L);
-        linkedHashMap.put("more than 365day", 0L);
+        linkedHashMap.put("1天", 0L);
+        linkedHashMap.put("7天", 0L);
+        linkedHashMap.put("15天", 0L);
+        linkedHashMap.put("30天", 0L);
+        linkedHashMap.put("90天", 0L);
+        linkedHashMap.put("180天", 0L);
+        linkedHashMap.put("365天", 0L);
+        linkedHashMap.put("超过一年", 0L);
         ans.forEach(t -> {
             if (t / 86400 < 1) {
-                linkedHashMap.put("1day", linkedHashMap.get("1day") + 1);
+                linkedHashMap.put("1天", linkedHashMap.get("1天") + 1);
             } else if (t / 86400 < 7) {
-                linkedHashMap.put("7day", linkedHashMap.get("7day") + 1);
+                linkedHashMap.put("7天", linkedHashMap.get("7天") + 1);
             } else if (t / 86400 < 15) {
-                linkedHashMap.put("15day", linkedHashMap.get("15day") + 1);
+                linkedHashMap.put("15天", linkedHashMap.get("15天") + 1);
             } else if (t / 86400 < 30) {
-                linkedHashMap.put("30day", linkedHashMap.get("30day") + 1);
+                linkedHashMap.put("30天", linkedHashMap.get("30天") + 1);
             } else if (t / 86400 < 90) {
-                linkedHashMap.put("90day", linkedHashMap.get("90day") + 1);
+                linkedHashMap.put("90天", linkedHashMap.get("90天") + 1);
             } else if (t / 86400 < 180) {
-                linkedHashMap.put("180day", linkedHashMap.get("180day") + 1);
+                linkedHashMap.put("180天", linkedHashMap.get("180天") + 1);
             } else if (t / 86400 < 365) {
-                linkedHashMap.put("365day", linkedHashMap.get("365day") + 1);
+                linkedHashMap.put("365天", linkedHashMap.get("365天") + 1);
             } else {
-                linkedHashMap.put("more than 365day", linkedHashMap.get("more than 365day") + 1);
+                linkedHashMap.put("超过一年", linkedHashMap.get("超过一年") + 1);
             }
 
         });
