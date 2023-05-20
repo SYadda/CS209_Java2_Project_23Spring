@@ -113,15 +113,7 @@ public class DemoController {
             t.getTags().stream().sorted().forEach(e -> {
                     //找出前十的与java一起出现的tags
                     tagString.append(e).append("//");
-                    if (finalTagMap1.containsKey(tagString.toString())) {
-                        finalTagMap1.put(tagString.toString(),
-                            finalTagMap1.get(tagString.toString()) + t.getView_count());
-                        finalTagMap2.put(tagString.toString(),
-                            finalTagMap2.get(tagString.toString()) + t.getUp_vote_count());
-                    } else {
-                        finalTagMap1.put(tagString.toString(), t.getView_count());
-                        finalTagMap2.put(tagString.toString(), t.getUp_vote_count());
-                    }
+
                     if (e.equalsIgnoreCase("java")) {
                         return;
                     }
@@ -132,6 +124,15 @@ public class DemoController {
                     }
                 }
             );
+            if (finalTagMap1.containsKey(tagString.toString())) {
+                finalTagMap1.put(tagString.toString(),
+                    finalTagMap1.get(tagString.toString()) + t.getView_count());
+                finalTagMap2.put(tagString.toString(),
+                    finalTagMap2.get(tagString.toString()) + t.getUp_vote_count());
+            } else {
+                finalTagMap1.put(tagString.toString(), t.getView_count());
+                finalTagMap2.put(tagString.toString(), t.getUp_vote_count());
+            }
 
         });
 
