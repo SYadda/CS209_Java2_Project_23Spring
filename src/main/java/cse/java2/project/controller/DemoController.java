@@ -11,6 +11,7 @@ import cse.java2.project.repository.CommentRepository;
 import cse.java2.project.repository.OwnerRepository;
 import cse.java2.project.serive.QuestionService;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -255,52 +256,88 @@ public class DemoController {
 
     public String getThread(Model model) {
         List<Question> questions = questionService.findAllQuestion();
-        TreeMap<Long, Long> q1 = new TreeMap<>();
+        //回答的用户Thread比
+        TreeMap<Long, Long> answerThead = new TreeMap<>();
+        //评论的用户Thread比
+        TreeMap<Long, Long> commentThread = new TreeMap<>();
+
         questions.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
-            List<Owner> owners = new ArrayList<>();
-            owners.add(ownerRepository.findAllByAccountid(t.getAccount_id()));
+
+            List<Owner> ownersOfAnswer = new ArrayList<>();
+            List<Owner> ownerOfComment = new ArrayList<>();
+            //按照账号id找到用户
+
+            //获取一个问题所有的回答
             answerRepository.findAllByQuestionid(t.getQuestion_id()).stream()
                 .filter(e -> e.getAccount_id() != null).forEach(e -> {
-                    owners.add(ownerRepository.findAllByAccountid(e.getAccount_id()));
+                    //获取每个回答的用户
+                    ownersOfAnswer.add(ownerRepository.findAllByAccountid(e.getAccount_id()));
+                    //获取对该问题的回答的评论的用户
                     List<Comment> comments = commentRepository.findAllByPostid(
-                        (long) e.getAccount_id());
+                        e.getAnswer_id());
+                    //加到用户list中
+
                     comments.forEach(s -> {
-                        owners.add(ownerRepository.findAllByAccountid(s.getAccount_id()));
+                        ownerOfComment.add(ownerRepository.findAllByAccountid(s.getAccount_id()));
                     });
                 });
-            long count = owners.stream().filter(e -> e.getUser_id() != null)
+            //去重统计这个Thread的参与用户量
+            long countOfAnswerOwner = ownersOfAnswer.stream().filter(e -> e.getUser_id() != null)
                 .filter(distinctByKey(Owner::getUser_id)).count();
-            if (q1.containsKey(count)) {
-                q1.put(count, q1.get(count) + 1);
-            } else {
-                q1.put(count, 1L);
-            }
+            long countOfCommentOwner = ownerOfComment.stream().filter(Objects::nonNull)
+                .filter(e -> e.getUser_id() != null)
+                .filter(distinctByKey(Owner::getUser_id)).count();
+            addCount(answerThead, countOfAnswerOwner);
+            addCount(commentThread, countOfCommentOwner);
+
         });
-        System.out.println(q1);
-        //q3
-        TreeMap<Integer, Integer> q3 = new TreeMap<>();
+
+
+        //回答活跃者
+        TreeMap<String, Integer> ansOwnerActive = new TreeMap<>();
+        //评论活跃者
+        TreeMap<String, Integer> comOwnerActive = new TreeMap<>();
         List<Comment> comments = commentRepository.findAll();
         comments.stream().filter(t -> t.getAccount_id() != null && t.account_id != -1)
             .forEach(t -> {
-                if (q3.containsKey(t.getAccount_id())) {
-                    q3.put(t.getAccount_id(), q3.get(t.getAccount_id()) + 1);
-                } else {
-                    q3.put(t.getAccount_id(), 1);
+                if (ownerRepository.findAllByAccountid(t.getAccount_id()) != null) {
+                    String name = ownerRepository.findAllByAccountid(t.getAccount_id())
+                        .getDisplay_name();
+                    if (comOwnerActive.containsKey(name)) {
+                        comOwnerActive.put(name, comOwnerActive.get(name) + 1);
+                    } else {
+                        comOwnerActive.put(name, 1);
+                    }
                 }
             });
         List<Answer> answers = answerRepository.findAll();
         answers.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
-            if (q3.containsKey(t.getAccount_id())) {
-                q3.put(t.getAccount_id(), q3.get(t.getAccount_id()) + 1);
+            String name = ownerRepository.findAllByAccountid(t.getAccount_id()).getDisplay_name();
+            if (ansOwnerActive.containsKey(name)) {
+                ansOwnerActive.put(name, ansOwnerActive.get(name) + 1);
             } else {
-                q3.put(t.getAccount_id(), 1);
+                ansOwnerActive.put(name, 1);
             }
         });
 
-        List<String> q3a = q3.entrySet().stream()
-            .sorted((o1, o2) -> o2.getValue() - o1.getValue()).limit(1)
-            .map(s -> ownerRepository.findAllByAccountid(s.getKey()).getDisplay_name()).toList();
-        System.out.println(q3a.get(0));
+        ValueComparator comparator = new ValueComparator(ansOwnerActive);
+        TreeMap<String, Integer> finalSortedMapOfAns = new TreeMap<>(comparator);
+        finalSortedMapOfAns.putAll(ansOwnerActive);
+        ValueComparator comparator1 = new ValueComparator(comOwnerActive);
+        TreeMap<String, Integer> finalSortedMapOfCom = new TreeMap<>(comparator1);
+        finalSortedMapOfCom.putAll(comOwnerActive);
+
+
+
+
+        //回答的用户Thread比
+        System.out.println(answerThead);
+        //评论的用户Thread比
+        System.out.println(commentThread);
+        //回答活跃者
+        System.out.println(finalSortedMapOfAns);
+        //评论活跃者
+        System.out.println(finalSortedMapOfCom);
         return null;
     }
 
@@ -308,6 +345,14 @@ public class DemoController {
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
         return t -> seen.add(keyExtractor.apply(t));
+    }
+
+    private static void addCount(TreeMap<Long, Long> q1, long count) {
+        if (q1.containsKey(count)) {
+            q1.put(count, q1.get(count) + 1);
+        } else {
+            q1.put(count, 1L);
+        }
     }
 
 
@@ -320,6 +365,25 @@ public class DemoController {
         this.answerRepository = answerRepository;
         this.ownerRepository = ownerRepository;
         this.commentRepository = commentRepository;
+    }
+
+
+    class ValueComparator implements Comparator<String> {
+
+        Map<String, Integer> map;
+
+        public ValueComparator(Map<String, Integer> map) {
+            this.map = map;
+        }
+
+        @Override
+        public int compare(String a, String b) {
+            if (map.get(a) >= map.get(b)) {
+                return -1;
+            } else {
+                return 1;
+            }
+        }
     }
 
 

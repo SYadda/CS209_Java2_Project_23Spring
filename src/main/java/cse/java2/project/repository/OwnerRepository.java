@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.Modifying;
 public interface OwnerRepository extends JpaRepository<Owner, Long> {
 
     public Owner findAllByAccountid(Integer integer);
+
 }
