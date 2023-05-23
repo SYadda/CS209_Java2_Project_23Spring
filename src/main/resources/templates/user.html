@@ -46,14 +46,15 @@
     }
     echarts.init(document.getElementById('answerUser')).setOption({
         title: {
-            text: '用户发表的回答数量',
+            text: '用户回答的问题数量',
+            subtext: '在同一个问题中多次回答，仅统计一次',
             left: 'center'
         },
         xAxis: {
             type: 'category',
             // boundaryGap: false // 两边留白，默认为true
             data: xRom,
-            axisLabel: {interval: 0, formatter: '{value} 个回答'}
+            axisLabel: {interval: 0, formatter: '{value} 个问题'}
         },
         yAxis: {
             type: 'value',
@@ -61,7 +62,7 @@
         },
         tooltip: {
             trigger: 'axis',
-            formatter: '发表{b}个回答的用户：{c}人',
+            formatter: '回答{b}个问题的用户：{c}人',
             axisPointer: {type: 'shadow'}
         },
         series: [{
@@ -117,6 +118,7 @@
     echarts.init(document.getElementById('ansTop10')).setOption({
         title: {
             text: '回答问题最活跃的10位用户',
+            subtext: '在同一个问题中多次回答，仅统计一次',
             left: 'center'
         },
         xAxis: {
@@ -188,6 +190,7 @@
     echarts.init(document.getElementById('answerThead')).setOption({
         title: {
             text: '问题的回答人数',
+            subtext: '一位用户在同一个问题中多次回答，仅统计一次',
             left: 'center'
         },
         xAxis: {
@@ -222,7 +225,7 @@
     echarts.init(document.getElementById('commentThead')).setOption({
         title: {
             text: '问题的评论人数',
-            subtext: '在同一个问题中多次评论，仅统计一次',
+            subtext: '一位用户在同一个问题中多次评论，仅统计一次',
             left: 'center'
         },
         xAxis: {
