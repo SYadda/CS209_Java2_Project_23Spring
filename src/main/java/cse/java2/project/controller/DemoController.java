@@ -262,7 +262,6 @@ public class DemoController {
         TreeMap<Long, Long> commentThread = new TreeMap<>();
 
         questions.stream().filter(t -> t.getAccount_id() != null).forEach(t -> {
-
             List<Owner> ownersOfAnswer = new ArrayList<>();
             List<Owner> ownerOfComment = new ArrayList<>();
             //按照账号id找到用户
@@ -289,7 +288,6 @@ public class DemoController {
                 .filter(distinctByKey(Owner::getUser_id)).count();
             addCount(answerThead, countOfAnswerOwner);
             addCount(commentThread, countOfCommentOwner);
-
         });
 
 
