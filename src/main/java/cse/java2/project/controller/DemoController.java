@@ -249,12 +249,12 @@ public class DemoController {
         model.addAttribute("PercentOfAc", (double) count / (double) questions.size());
         model.addAttribute("countVoteMore", (double) countVoteMore / (double) count);
         model.addAttribute("acTimeDis", objectMapper.writeValueAsString(linkedHashMap));
-        System.out.println(getThread(null));
         return "acc";
     }
 
-
-    public String getThread(Model model) {
+    @GetMapping("user")
+    public String getUser(Model model) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
         List<Question> questions = questionService.findAllQuestion();
         //回答的用户Thread比
         TreeMap<Long, Long> answerThead = new TreeMap<>();
@@ -318,27 +318,40 @@ public class DemoController {
             }
         });
 
-        ValueComparator comparator = new ValueComparator(ansOwnerActive);
-        TreeMap<String, Integer> finalSortedMapOfAns = new TreeMap<>(comparator);
-        finalSortedMapOfAns.putAll(ansOwnerActive);
-        ValueComparator comparator1 = new ValueComparator(comOwnerActive);
-        TreeMap<String, Integer> finalSortedMapOfCom = new TreeMap<>(comparator1);
-        finalSortedMapOfCom.putAll(comOwnerActive);
-
-
-
-
-        //回答的用户Thread比
-        System.out.println(answerThead);
-        //评论的用户Thread比
-        System.out.println(commentThread);
+        //Thread内回答的用户数量
+        model.addAttribute("answerThead", objectMapper.writeValueAsString(answerThead));
+        //Thread内评论的用户数量
+        model.addAttribute("commentThead", objectMapper.writeValueAsString(commentThread));
+        //用户的回答数量分布
+        model.addAttribute("answerUser", objectMapper.writeValueAsString(getUserCount(ansOwnerActive)));
+        //用户的评论数量分布
+        model.addAttribute("commentUser", objectMapper.writeValueAsString(getUserCount(comOwnerActive)));
         //回答活跃者
-        System.out.println(finalSortedMapOfAns);
+        model.addAttribute("ansTop10", objectMapper.writeValueAsString(getTop10(ansOwnerActive)));
         //评论活跃者
-        System.out.println(finalSortedMapOfCom);
-        return null;
-    }
+        model.addAttribute("comTop10", objectMapper.writeValueAsString(getTop10(comOwnerActive)));
 
+        return "user";
+    }
+    private Map<String, Integer> getTop10(TreeMap<String, Integer> oa) {
+        TreeMap<String, Integer> sorted_oa = new TreeMap<>(new ValueComparator(oa));
+        sorted_oa.putAll(oa);
+        return sorted_oa.entrySet().stream().limit(10)
+                .collect(Collectors.toMap(e -> e.getKey().split(" ")[0], Map.Entry::getValue));
+        //取名字中的第一个词，方便显示
+    }
+    private Map<String, Integer> getUserCount(TreeMap<String, Integer> oa) {
+        TreeMap<String, Integer> user = new TreeMap<>();
+        oa.forEach((key, value) -> {
+            String s = String.valueOf(value);
+            if (user.containsKey(s)) {
+                user.put(s, user.get(s) + 1);
+            } else {
+                user.put(s, 1);
+            }
+        });
+        return user;
+    }
 
     private static <T> Predicate<T> distinctByKey(Function<? super T, ?> keyExtractor) {
         Set<Object> seen = ConcurrentHashMap.newKeySet();
