@@ -2,6 +2,8 @@ package cse.java2.project.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qianxinyao.analysis.jieba.keyword.Keyword;
+import com.qianxinyao.analysis.jieba.keyword.TFIDFAnalyzer;
 import cse.java2.project.model.Answer;
 import cse.java2.project.model.Comment;
 import cse.java2.project.model.Owner;
@@ -10,15 +12,10 @@ import cse.java2.project.repository.AnswerRepository;
 import cse.java2.project.repository.CommentRepository;
 import cse.java2.project.repository.OwnerRepository;
 import cse.java2.project.serive.QuestionService;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeMap;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Function;
@@ -57,6 +54,54 @@ public class DemoController {
         integers[2] = 500;
         module.addAttribute("shuzu", arrayList.toString());
         return "demo";
+    }
+
+    @GetMapping("/countJavaAPI")
+    public String countJavaAPI(Model model) throws JsonProcessingException, FileNotFoundException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Question> questions = questionService.findAllQuestion();
+
+        String filename = "src/main/resources/api.txt"; // The compact3 of https://docs.oracle.com/javase/8/docs/api/
+        final String IntSum = "Interface Summary";
+        String front_Name = "", last_Line = "", curr_line = "";
+
+        HashMap<String, String> apis = new HashMap<>();
+        HashMap<String, Double> apis_count = new HashMap<>();
+
+        try (Scanner sc = new Scanner(new FileReader(filename))) {
+            while (sc.hasNextLine()) {
+                curr_line = sc.nextLine();
+                if (curr_line.equals(IntSum)) {
+                    front_Name = last_Line;
+                }
+
+                String[] api = curr_line.split("[\\s\\t]");
+                if (api.length == 1) {
+                    String temp = api[0].split("<")[0];  // HaspMap<K,V> => HashMap
+                    apis.put(temp, front_Name);
+                    apis_count.put(temp, 0D);
+                }
+                last_Line = curr_line;
+            }
+        }
+
+        TFIDFAnalyzer ta = new TFIDFAnalyzer();
+        for (Question q: questions) {
+            List<Keyword> list = ta.analyze(q.getBody_markdown(), 1000000);
+            for(Keyword word: list) {
+                String name = word.getName();
+                if (apis.containsKey(name)) {
+                    apis_count.put(name, apis_count.get(name) + word.getTfidfvalue());
+                }
+            }
+        }
+
+        Map<String, String> display_map = apis_count.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(10)
+                .collect(Collectors.toMap(e -> apis.get(e.getKey()) + "." + e.getKey(), e -> String.format("%.2f", e.getValue())));
+
+        model.addAttribute("api_count", objectMapper.writeValueAsString(display_map));
+        return "countJavaAPI";
     }
 
     @GetMapping("/getPercent")
