@@ -101,7 +101,7 @@ public class DemoController {
                 .collect(Collectors.toMap(e -> apis.get(e.getKey()) + "." + e.getKey(), e -> String.format("%.2f", e.getValue())));
 
         model.addAttribute("api_count", objectMapper.writeValueAsString(display_map));
-        return "countJavaAPI";
+        return "api";
     }
 
     @GetMapping("/getPercent")
