@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Content</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h3 {
+      text-align: center;
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+
+<body>
+<h1>Visualizes of Stack Overflow Q&A Data</h1>
+<h3>12110425 罗启航   12011710 董宇航</h3>
+<div id="wordcloud" style="width: 1000px; height: 60vh; display: flex; margin: 0 auto"></div>
+<div class="button-container">
+  <a class="button" href="http://localhost:9090/getPercent">问题与回答</a>
+  <a class="button" href="http://localhost:9090/AccA">赞同与采纳</a>
+  <a class="button" href="http://localhost:9090/tag">Tag</a>
+  <a class="button" href="http://localhost:9090/user">用户活跃度</a>
+  <a class="button" href="http://localhost:9090/countJavaAPI/">Java API</a>
+</div>
+</body>
+
+<script>
+  let wordcloudRaw =  {'Arrays': '0.09', 'Override': '0.40', 'System': '0.73', 'URL': '0.11', 'Date': '0.09', 'Data': '0.10', 'Scanner': '0.35', 'Error': '0.17', 'Integer': '0.50', 'ArrayList': '0.21', 'Calendar': '0.13', 'Long': '0.17', 'Thread': '0.32', 'Node': '0.17', 'Map': '0.11', 'Math': '0.14', 'Console': '0.09', 'String': '2.34', 'Configuration': '0.09', 'Entity': '0.23', 'Set': '0.12', 'IOException': '0.20', 'UUID': '0.17', 'Exception': '0.32', 'File': '0.26', 'List': '0.39', 'Type': '0.08', 'Object': '0.25', 'Class': '0.09', 'Schema': '0.09'}
+  let wordcloudData = [];
+  for (const key in wordcloudRaw) {
+    wordcloudData.push({
+      name: key,
+      value: wordcloudRaw[key]
+    });
+  }
+
+  echarts.init(document.getElementById('wordcloud')).setOption({
+    tooltip: {formatter: '{c}%的问题与 {b} 相关',},
+    series: [{
+      type: 'wordCloud',
+      shape: {
+        cloudGrow: 0.2
+      },
+      sizeRange: [30, 100],
+      rotationRange: [-30, 30],
+      gridSize: 2,
+      drawOutOfBound: false,
+      layoutAnimation: true,
+      keepAspect: true,
+      textStyle: {
+        fontWeight: 'bold',
+        color: function () {
+          return 'rgb(' + [
+            Math.round(Math.random() * 160),
+            Math.round(Math.random() * 160),
+            Math.round(Math.random() * 160)
+          ].join(',') + ')';
+        }
+      },
+      emphasis: {
+        textStyle: {
+          shadowBlur: 15,
+          shadowColor: '#333'
+        }
+      },
+      data: wordcloudData.sort(function (a, b) {
+        return b.value - a.value;
+      })
+    }]
+  });
+
+</script>
+
+</html>
+
+
