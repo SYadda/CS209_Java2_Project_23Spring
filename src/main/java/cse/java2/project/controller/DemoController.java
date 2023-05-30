@@ -297,6 +297,10 @@ public class DemoController {
         return "acc";
     }
 
+    @GetMapping("content")
+    public String getContent(Model model) { return "content"; }
+    @GetMapping("countJavaAPI/content")
+    public String getContent2(Model model) { return "content"; }
     @GetMapping("user")
     public String getUser(Model model) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();

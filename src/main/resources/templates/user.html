@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>user</title>
+    <title>用户活跃度</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
     <style>
@@ -14,28 +14,40 @@
             background-attachment: fixed;
             background-size:100% 100%;
         }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-decoration: none;
+            color: #fff;
+            background-color: #007bff;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
 <div style="width: 1500px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto">
-    <div style="width: 50%;height: 100%">
-        <div id="answerUser" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="commentUser" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="ansTop10" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="comTop10" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="answerThead" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="commentThead" style="height: 100%;width: 100%"></div>
-    </div>
+    <div id="answerUser" style="width: 50%;height: 100%"></div>
+    <div id="commentUser" style="width: 50%;height: 100%"></div>
+    <div id="ansTop10" style="width: 50%;height: 100%"></div>
+    <div id="comTop10" style="width: 50%;height: 100%"></div>
+    <div id="answerThead" style="width: 50%;height: 100%"></div>
+    <div id="commentThead" style="width: 50%;height: 100%"></div>
 </div>
 <input id="au" type="hidden" th:value="${answerUser}">
 <input id="cu" type="hidden" th:value="${commentUser}">
@@ -43,6 +55,12 @@
 <input id="cTop" type="hidden" th:value="${comTop10}">
 <input id="at" type="hidden" th:value="${answerThead}">
 <input id="ct" type="hidden" th:value="${commentThead}">
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<div class="button-container" style="justify-content: center;">
+    <a class="button" href="content" style="justify-content: center">返回目录</a>
+</div>
 
 </body>
 

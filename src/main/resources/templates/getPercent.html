@@ -3,7 +3,7 @@
 <head>
   <head>
     <meta charset="UTF-8">
-    <title>getPercent</title>
+    <title>问题与回答</title>
     <!--  Import echarts lib by CDN, you can also import from local files  -->
 
     <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
@@ -23,18 +23,40 @@
         background-attachment: fixed;
         background-size:100% 100%;
       }
+
+      .button-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .button {
+        display: inline-block;
+        margin: 10px;
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #0056b3;
+      }
     </style>
   </head>
 </head>
 <body>
 <div style="width: 1500px;height: 60vh;display: flex; flex-wrap: row wrap; margin: 0 auto">
-  <div style="width: 50%;height: 100%">
-    <div id="piechartReply" style="height: 100%;width: 100%"></div>
-  </div>
-  <div style="width: 50%;height: 100%">
-    <div id="piechartAnsDis" style="height: 100%;width: 100%"></div>
-  </div>
-
+  <div id="piechartReply" style="width: 50%"></div>
+  <div id="piechartAnsDis" style="width: 50%"></div>
+</div>
+<div class="button-container">
+  <a class="button" href="content">返回目录</a>
 </div>
 <input id="ansDis" type="hidden" th:value="${ansDis}">
 <input id="ansBeReply" type="hidden" th:value="${ansBeReply}">
