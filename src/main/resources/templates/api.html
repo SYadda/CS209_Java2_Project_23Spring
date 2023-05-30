@@ -5,13 +5,19 @@
     <title>countJavaAPI</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+    <style>
+        body {
+            background-image: url(../img/背景.png);
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size:100% 100%;
+        }
+    </style>
 </head>
 <body>
-<div style="width: 1500px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto">
-    <div style="width: 50%;height: 100%">
-        <div id="api_count" style="height: 100%;width: 100%"></div>
-    </div>
-</div>
+<div id="api_count" style="width: 1000px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto"></div>
 <input id="ac" type="hidden" th:value="${api_count}">
 </body>
 
