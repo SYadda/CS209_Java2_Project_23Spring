@@ -209,11 +209,9 @@
     });
 
     json = JSON.parse($('#at').val());
-    xRom = [];
-    yRom = [];
+    let dat = [];
     for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
+        dat.push({name: key, value: json[key]})
     }
     echarts.init(document.getElementById('answerThead')).setOption({
         title: {
@@ -221,34 +219,33 @@
             subtext: '一位用户在同一个问题中多次回答，仅统计一次',
             left: 'center'
         },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 1, formatter: '{value}人'}
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 个问题'}
-        },
         tooltip: {
-            trigger: 'axis',
-            formatter: '有{b}人回答的问题：{c}个',
-            axisPointer: {type: 'shadow'}
+            trigger: 'item',
+            formatter: '有{b}人评论的问题：{c}个，{d}%'
         },
         series: [{
-            data: yRom,
-            type: 'bar',
+            data: dat,
+            type: 'pie',
+            radius: ['50%','70%'],
             areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
+            avoidLabelOverlap: false,
+            label: {show: false, position: 'center'},
+            labelLine: {show: false},
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 60,
+                    fontWeight: 'bold',
+                    formatter: '{b}人'
+                }
+            }
         }]
     });
 
     json = JSON.parse($('#ct').val());
-    xRom = [];
-    yRom = [];
+    dat = [];
     for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
+        dat.push({name: key, value: json[key]})
     }
     echarts.init(document.getElementById('commentThead')).setOption({
         title: {
@@ -256,25 +253,26 @@
             subtext: '一位用户在同一个问题中多次评论，仅统计一次',
             left: 'center'
         },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 1, formatter: '{value}人'}
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 个问题'}
-        },
         tooltip: {
-            trigger: 'axis',
-            formatter: '有{b}人评论的问题：{c}个',
-            axisPointer: {type: 'shadow'}
+            trigger: 'item',
+            formatter: '有{b}人评论的问题：{c}个，{d}%'
         },
         series: [{
-            data: yRom,
-            type: 'bar',
+            data: dat,
+            type: 'pie',
+            radius: ['50%','70%'],
             areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
+            avoidLabelOverlap: false,
+            label: {show: false, position: 'center'},
+            labelLine: {show: false},
+            emphasis: {
+                label: {
+                    show: true,
+                    fontSize: 60,
+                    fontWeight: 'bold',
+                    formatter: '{b}人'
+                }
+            }
         }]
     });
 </script>
