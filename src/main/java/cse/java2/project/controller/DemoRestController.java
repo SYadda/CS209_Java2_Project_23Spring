@@ -18,11 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoRestController {
 
-    private final QuestionService questionService;
-
     @Autowired
-    public DemoRestController(QuestionService questionService) {
-        this.questionService = questionService;
+    public DemoRestController() {
+
     }
 
     @GetMapping("/api/questionById")

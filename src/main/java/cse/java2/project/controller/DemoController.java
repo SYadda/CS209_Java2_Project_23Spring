@@ -18,6 +18,7 @@ import java.io.FileReader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -45,7 +46,6 @@ public class DemoController {
      */
     @GetMapping({"/", "/demo"})
     public String demo(Model module) {
-        //List<Question> questions = questionService.getQuestions();
         int[] integers = new int[3];
         ArrayList<Long> arrayList = new ArrayList<>();
         questionService.findAllQuestion().forEach(t -> arrayList.add(t.getAnswer_count()));
@@ -116,8 +116,12 @@ public class DemoController {
         map.put("6~10个回答", 0);
         map.put(">10个回答", 0);
         //添加饼状图的值
+        AtomicLong total = new AtomicLong();
+        AtomicLong max = new AtomicLong();
         questions.forEach(t -> {
             Long ansCount = t.getAnswer_count();
+            total.addAndGet(t.getAnswer_count());
+            max.set(Math.max(t.getAnswer_count(),max.get()));
             if (ansCount != 0) {
                 if (ansCount == 1) {
                     map.put("1个回答", map.get("1个回答") + 1);
@@ -137,6 +141,8 @@ public class DemoController {
         //被回答的饼状图
         model.addAttribute("ansBeReply",
             objectMapper.writeValueAsString(getBeAnsPercent(questions)));
+        model.addAttribute("answerNumMax",max.get());
+        model.addAttribute("answerAvera",(double) total.get()/(double) questions.size());
         return "getPercent";
     }
 
