@@ -12,7 +12,7 @@
       padding: 20px;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      background-size:100% 100%;
+      background-size: 100% 100%;
     }
 
     .button-container {
@@ -72,7 +72,7 @@
   let tagsMapMostAppearDom = document.getElementById('tagsMapMostAppear');
   let tagsMapMostAppearChart = echarts.init(tagsMapMostAppearDom);
   json = JSON.parse(json);
-  for (const key in json){
+  for (const key in json) {
     xRow[xRow.length] = key;
     yRow[yRow.length] = json[key];
   }
@@ -98,7 +98,7 @@
       {
         type: 'category',
         data: xRow,
-        axisLabel:{
+        axisLabel: {
           interval: 0,//横轴信息全部显示
           rotate: -45, //倾斜度 -90 至 90 默认为0
           margin: 5, //刻度标签与轴线之间的距离
@@ -133,7 +133,7 @@
   let tagsMapMaxViewDom = document.getElementById('tagsMapMaxView');
   let tagsMapMaxViewChart = echarts.init(tagsMapMaxViewDom);
   json = JSON.parse(json);
-  for (const key in json){
+  for (const key in json) {
     xRow[xRow.length] = key;
     yRow[yRow.length] = json[key];
   }
@@ -159,7 +159,7 @@
       {
         type: 'category',
         data: xRow,
-        axisLabel:{
+        axisLabel: {
           interval: 0,//横轴信息全部显示
           rotate: -45, //倾斜度 -90 至 90 默认为0
           margin: 5, //刻度标签与轴线之间的距离
@@ -188,15 +188,13 @@
 
   tagsMapMaxViewChart.setOption(option);
 
-
-
   json = $('#maxup').val();
   xRow = [];
   yRow = [];
   let tagsMapMaxUpDom = document.getElementById('tagsMapMaxUp');
   let tagsMapMaxUpChart = echarts.init(tagsMapMaxUpDom);
   json = JSON.parse(json);
-  for (const key in json){
+  for (const key in json) {
     xRow[xRow.length] = key;
     yRow[yRow.length] = json[key];
   }
@@ -222,7 +220,7 @@
       {
         type: 'category',
         data: xRow,
-        axisLabel:{
+        axisLabel: {
           interval: 0,//横轴信息全部显示
           rotate: -45, //倾斜度 -90 至 90 默认为0
           margin: 5, //刻度标签与轴线之间的距离

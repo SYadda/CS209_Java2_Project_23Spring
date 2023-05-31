@@ -12,7 +12,7 @@
       padding: 20px;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      background-size:100% 100%;
+      background-size: 100% 100%;
     }
 
     .button-container {
@@ -89,8 +89,8 @@
         data: yRom,
         type: 'line',
         areaStyle: {},
-        label:{
-          show:true,
+        label: {
+          show: true,
           formatter: '{c}个问题'
         }
       }
@@ -114,9 +114,15 @@
         type: 'pie',
         radius: '50%',
         data: [
-          {value: parseFloat(vote100).toFixed(3), name: '其他回答\n' + parseFloat(vote100).toFixed(2) + '%'},
+          {
+            value: parseFloat(vote100).toFixed(3),
+            name: '其他回答\n' + parseFloat(vote100).toFixed(2) + '%'
+          },
           // '含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
-          {value: parseFloat(100 - vote100).toFixed(3), name: '被提问者采纳的回答\n' + parseFloat(100 - vote100).toFixed(2) + '%'},
+          {
+            value: parseFloat(100 - vote100).toFixed(3),
+            name: '被提问者采纳的回答\n' + parseFloat(100 - vote100).toFixed(2) + '%'
+          },
           // '不含有 non-accepted answer 的 upvote 数高于 accepted answer 的问题的百分比'
         ],
         emphasis: {
@@ -130,7 +136,6 @@
     ]
   };
   countVoteMoreChart.setOption(option);
-
 
   per100 = $('#Per').val() * 100;
   let PercentOfAcchartDom = document.getElementById("PercentOfAc");
@@ -147,8 +152,14 @@
         type: 'pie',
         radius: '50%',
         data: [
-          {value: parseFloat(per100).toFixed(3), name: '有回答被提问者采纳\n' + parseFloat(per100).toFixed(2) + '%'},
-          {value: parseFloat(100 - per100).toFixed(3), name: '无回答被提问者采纳\n' + parseFloat(100 - per100).toFixed(2) + '%'},
+          {
+            value: parseFloat(per100).toFixed(3),
+            name: '有回答被提问者采纳\n' + parseFloat(per100).toFixed(2) + '%'
+          },
+          {
+            value: parseFloat(100 - per100).toFixed(3),
+            name: '无回答被提问者采纳\n' + parseFloat(100 - per100).toFixed(2) + '%'
+          },
         ],
         emphasis: {
           itemStyle: {

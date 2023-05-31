@@ -11,12 +11,13 @@ import org.springframework.jdbc.core.JdbcTemplate;
 class ApplicationTests {
 
 
-    @Autowired
-    JdbcTemplate jdbcTemplate;
-    @Test
-    void contextLoads() {
-        List<Long> a = jdbcTemplate.queryForList("select account_id from question",Long.class);
-        a.forEach(System.out::println);
-    }
+  @Autowired
+  JdbcTemplate jdbcTemplate;
+
+  @Test
+  void contextLoads() {
+    List<Long> a = jdbcTemplate.queryForList("select account_id from question", Long.class);
+    a.forEach(System.out::println);
+  }
 
 }

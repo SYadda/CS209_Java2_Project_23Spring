@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <head>
     <meta charset="UTF-8">
     <title>问题与回答</title>
     <!--  Import echarts lib by CDN, you can also import from local files  -->
 
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+    <script
+        src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
 
     <!--  Import the data files  -->
     <script src='../js/wordcloud-demo.js'></script>
     <script src='../js/piechart-demo.js'></script>
-    <script src = '../js/Smoothed_line.js'></script>
+    <script src='../js/Smoothed_line.js'></script>
     <style>
       body {
         background-image: url(../img/背景.png);
@@ -21,7 +22,7 @@
         padding: 20px;
         background-repeat: no-repeat;
         background-attachment: fixed;
-        background-size:100% 100%;
+        background-size: 100% 100%;
       }
 
       .button-container {
@@ -69,7 +70,7 @@
   json = $('#ansDis').val();
   piechartRaw1 = JSON.parse(json);
   let piechartAnsDis = echarts.init(document.getElementById('piechartAnsDis'));
-  piechartData  = [];
+  piechartData = [];
   for (const key in piechartRaw1) {
     piechartData.push({
       name: key,

@@ -1,91 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Java API</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
-    <style>
-        body {
-            background-image: url(../img/背景.png);
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size:100% 100%;
-        }
+  <meta charset="UTF-8">
+  <title>Java API</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+  <style>
+    body {
+      background-image: url(../img/背景.png);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        .button {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            color: #fff;
-            background-color: #007bff;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
 
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-<div id="api_count" style="width: 1000px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto"></div>
+<div id="api_count"
+     style="width: 1000px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto"></div>
 <input id="ac" type="hidden" th:value="${api_count}">
 <div class="button-container">
-    <a class="button" href="content">返回目录</a>
+  <a class="button" href="content">返回目录</a>
 </div>
 </body>
 
 <script>
-    let json = JSON.parse($('#ac').val());
-    let xRom = [];
-    let yRom = [];
-    for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
-    }
-    echarts.init(document.getElementById('api_count')).setOption({
-        title: {
-            text: '讨论最频繁的Java API',
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 0,formatter: function (value) {
-                    let arr = value.split(".");
-                    return arr[arr.length-1]
-                }
-            }
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value}'}
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: '{b}的讨论活跃度：{c}',
-            axisPointer: {type: 'shadow'}
-        },
-        series: [{
-            realtimeSort: true,
-            data: yRom,
-            type: 'bar',
-            areaStyle: {},
-            label:{show:true, position: 'top'}
-        }]
-    });
+  let json = JSON.parse($('#ac').val());
+  let xRom = [];
+  let yRom = [];
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  echarts.init(document.getElementById('api_count')).setOption({
+    title: {
+      text: '讨论最频繁的Java API',
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      data: xRom,
+      axisLabel: {
+        interval: 0, formatter: function (value) {
+          let arr = value.split(".");
+          return arr[arr.length - 1]
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {formatter: '{value}'}
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '{b}的讨论活跃度：{c}',
+      axisPointer: {type: 'shadow'}
+    },
+    series: [{
+      realtimeSort: true,
+      data: yRom,
+      type: 'bar',
+      areaStyle: {},
+      label: {show: true, position: 'top'}
+    }]
+  });
 </script>
 </html>

@@ -18,77 +18,77 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class DemoRestController {
 
-    @Autowired
-    public DemoRestController() {
+  @Autowired
+  public DemoRestController() {
 
+  }
+
+  @GetMapping("/api/questionById")
+  public String getQuestionByQuestionId(@RequestParam(value = "id") Optional<String> id) {
+    if (id.isPresent()) {
+      StringBuilder content = new StringBuilder();
+      try {
+        String firstPort = "https://api.stackexchange.com/2.3/questions/" + id.get()
+            + "?order=desc&sort=activity&site=stackoverflow";
+        stackAPI(content, firstPort);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return content.toString();
     }
+    return null;
+  }
 
-    @GetMapping("/api/questionById")
-    public String getQuestionByQuestionId(@RequestParam(value = "id") Optional<String> id) {
-        if (id.isPresent()) {
-            StringBuilder content = new StringBuilder();
-            try {
-                String firstPort = "https://api.stackexchange.com/2.3/questions/" + id.get()
-                    + "?order=desc&sort=activity&site=stackoverflow";
-                stackAPI(content, firstPort);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content.toString();
-        }
-        return null;
+  private void stackAPI(StringBuilder content, String firstPort) throws IOException {
+    String key = "&key=4RJi5zpqsZDDEAyx1ab73g((";
+    URL url = new URL(firstPort + key);
+    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+    con.setRequestMethod("GET");
+    con.setRequestProperty("Accept-Encoding", "gzip");
+    BufferedReader in = new BufferedReader(
+        new InputStreamReader(new GZIPInputStream(con.getInputStream()),
+            StandardCharsets.UTF_8));
+    String inputLine;
+    while ((inputLine = in.readLine()) != null) {
+      content.append(inputLine);
     }
+    in.close();
+  }
 
-    private void stackAPI(StringBuilder content, String firstPort) throws IOException {
-        String key = "&key=4RJi5zpqsZDDEAyx1ab73g((";
-        URL url = new URL(firstPort + key);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        con.setRequestProperty("Accept-Encoding", "gzip");
-        BufferedReader in = new BufferedReader(
-            new InputStreamReader(new GZIPInputStream(con.getInputStream()),
-                StandardCharsets.UTF_8));
-        String inputLine;
-        while ((inputLine = in.readLine()) != null) {
-            content.append(inputLine);
-        }
-        in.close();
+
+  @GetMapping("/api/questionByTags")
+  public String getQuestionByTag(@RequestParam(value = "tags") Optional<String> tags) {
+    if (tags.isPresent()) {
+      StringBuilder content = new StringBuilder();
+      try {
+        String firstPort =
+            "https://api.stackexchange.com/2.3/questions?pagesize=10&order=desc&sort=activity&tagged=java;"
+                + tags.get() + "%3Bmysql&site=stackoverflow";
+        stackAPI(content, firstPort);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return content.toString();
     }
+    return null;
+  }
 
 
-    @GetMapping("/api/questionByTags")
-    public String getQuestionByTag(@RequestParam(value = "tags") Optional<String> tags) {
-        if (tags.isPresent()) {
-            StringBuilder content = new StringBuilder();
-            try {
-                String firstPort =
-                    "https://api.stackexchange.com/2.3/questions?pagesize=10&order=desc&sort=activity&tagged=java;"
-                        + tags.get() + "%3Bmysql&site=stackoverflow";
-                stackAPI(content, firstPort);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content.toString();
-        }
-        return null;
+  @GetMapping("/api/relate")
+  public String getQuestionRelate(@RequestParam(value = "id") Optional<String> id) {
+    if (id.isPresent()) {
+      StringBuilder content = new StringBuilder();
+      try {
+        String firstPort = "https://api.stackexchange.com/2.3/questions/" + id.get()
+            + "/related?pagesize=10&order=desc&sort=activity&site=stackoverflow";
+        stackAPI(content, firstPort);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      return content.toString();
     }
-
-
-    @GetMapping("/api/relate")
-    public String getQuestionRelate(@RequestParam(value = "id") Optional<String> id) {
-        if (id.isPresent()) {
-            StringBuilder content = new StringBuilder();
-            try {
-                String firstPort = "https://api.stackexchange.com/2.3/questions/" + id.get()
-                    + "/related?pagesize=10&order=desc&sort=activity&site=stackoverflow";
-                stackAPI(content, firstPort);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return content.toString();
-        }
-        return null;
-    }
+    return null;
+  }
 
 
 }

@@ -7,7 +7,8 @@
   <title>Visualization of Stack Overflow Q&A Data</title>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <script
+      src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
   <style>
     body {
       background-image: url(../img/背景.png);
@@ -15,7 +16,7 @@
       padding: 20px;
       background-repeat: no-repeat;
       background-attachment: fixed;
-      background-size:100% 100%; 
+      background-size: 100% 100%;
     }
 
     h1 {
@@ -55,7 +56,7 @@
 
 <body>
 <h1>Visualization of Stack Overflow Q&A Data</h1>
-<h3>12110425 罗启航   12011710 董宇航</h3>
+<h3>12110425 罗启航 12011710 董宇航</h3>
 <div id="wordcloud" style="width: 1000px; height: 60vh; display: flex; margin: 0 auto"></div>
 <div class="button-container">
   <a class="button" href="http://localhost:9090/getPercent">问题与回答</a>
@@ -67,7 +68,38 @@
 </body>
 
 <script>
-  let wordcloudRaw =  {'Arrays': '0.09', 'Override': '0.40', 'System': '0.73', 'URL': '0.11', 'Date': '0.09', 'Data': '0.10', 'Scanner': '0.35', 'Error': '0.17', 'Integer': '0.50', 'ArrayList': '0.21', 'Calendar': '0.13', 'Long': '0.17', 'Thread': '0.32', 'Node': '0.17', 'Map': '0.11', 'Math': '0.14', 'Console': '0.09', 'String': '2.34', 'Configuration': '0.09', 'Entity': '0.23', 'Set': '0.12', 'IOException': '0.20', 'UUID': '0.17', 'Exception': '0.32', 'File': '0.26', 'List': '0.39', 'Type': '0.08', 'Object': '0.25', 'Class': '0.09', 'Schema': '0.09'}
+  let wordcloudRaw = {
+    'Arrays': '0.09',
+    'Override': '0.40',
+    'System': '0.73',
+    'URL': '0.11',
+    'Date': '0.09',
+    'Data': '0.10',
+    'Scanner': '0.35',
+    'Error': '0.17',
+    'Integer': '0.50',
+    'ArrayList': '0.21',
+    'Calendar': '0.13',
+    'Long': '0.17',
+    'Thread': '0.32',
+    'Node': '0.17',
+    'Map': '0.11',
+    'Math': '0.14',
+    'Console': '0.09',
+    'String': '2.34',
+    'Configuration': '0.09',
+    'Entity': '0.23',
+    'Set': '0.12',
+    'IOException': '0.20',
+    'UUID': '0.17',
+    'Exception': '0.32',
+    'File': '0.26',
+    'List': '0.39',
+    'Type': '0.08',
+    'Object': '0.25',
+    'Class': '0.09',
+    'Schema': '0.09'
+  }
   let wordcloudData = [];
   for (const key in wordcloudRaw) {
     wordcloudData.push({

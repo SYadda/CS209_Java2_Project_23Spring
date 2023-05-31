@@ -1,181 +1,180 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Java2 Project Demo</title>
-    <!--  Import echarts lib by CDN, you can also import from local files  -->
-    <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <!--  Import the data files  -->
-    <script src='../js/wordcloud-demo.js'></script>
-    <script src='../js/piechart-demo.js'></script>
-    <script src = '../js/Smoothed_line.js'></script>
+  <meta charset="UTF-8">
+  <title>Java2 Project Demo</title>
+  <!--  Import echarts lib by CDN, you can also import from local files  -->
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+  <script
+      src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!--  Import the data files  -->
+  <script src='../js/wordcloud-demo.js'></script>
+  <script src='../js/piechart-demo.js'></script>
+  <script src='../js/Smoothed_line.js'></script>
 </head>
 <body style="text-align: center">
 <h1>Tag词云图展示demo</h1>
 <div style="width: 100%;height: 60vh;display: flex">
-    <div style="width: 50%;height: 100%">
-        <div id="wordcloud" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="piechart" style="height: 100%;width: 100%"></div>
-    </div>
-    <div style="width: 50%;height: 100%">
-        <div id="soomthedline" style="height: 100%;width: 100%"></div>
-    </div>
+  <div style="width: 50%;height: 100%">
+    <div id="wordcloud" style="height: 100%;width: 100%"></div>
+  </div>
+  <div style="width: 50%;height: 100%">
+    <div id="piechart" style="height: 100%;width: 100%"></div>
+  </div>
+  <div style="width: 50%;height: 100%">
+    <div id="soomthedline" style="height: 100%;width: 100%"></div>
+  </div>
 </div>
-<input id="nums" type="hidden"  th:value="${shuzu}">
+<input id="nums" type="hidden" th:value="${shuzu}">
 </body>
 
 
 <script>
-<!--  echarts configuration  -->
+  <!--  echarts configuration  -->
 
-    let val = $("#nums").val();
-    let shuzu = JSON.parse(val);
+  let val = $("#nums").val();
+  let shuzu = JSON.parse(val);
 
+  let wordcloud = echarts.init(document.getElementById('wordcloud'));
+  let wordcloudData = [];
+  for (const key in wordcloudRaw) {
+    wordcloudData.push({
+      name: key,
+      value: wordcloudRaw[key]
+    });
+  }
+  let wordcloudOption = {
+    title: {
+      text: '与Java相关的Tag词云图',
+      textStyle: {
+        // fontStyle: 'oblique',
+        fontSize: 20,
+        color: '#4cc9f0'
+      },
+      left: 'center'
+    },
+    tooltip: {formatter: '{c}个问题带有tag {b}',},
+    series: [{
+      type: 'wordCloud',
+      shape: {
+        cloudGrow: 0.2
+      },
+      sizeRange: [10, 60],
+      rotationRange: [-30, 30],
+      gridSize: 2,
+      drawOutOfBound: false,
+      layoutAnimation: true,
+      keepAspect: true,
+      textStyle: {
+        fontWeight: 'bold',
+        color: function () {
+          return 'rgb(' + [
+            Math.round(Math.random() * 160),
+            Math.round(Math.random() * 160),
+            Math.round(Math.random() * 160)
+          ].join(',') + ')';
+        }
+      },
+      emphasis: {
+        textStyle: {
+          shadowBlur: 15,
+          shadowColor: '#333'
+        }
+      },
+      data: wordcloudData.sort(function (a, b) {
+        return b.value - a.value;
+      })
+    }]
+  };
+  wordcloud.setOption(wordcloudOption);
 
-    let wordcloud = echarts.init(document.getElementById('wordcloud'));
-    let wordcloudData = [];
-    for (const key in wordcloudRaw) {
-        wordcloudData.push({
-            name: key,
-            value: wordcloudRaw[key]
-        });
-    }
-    let wordcloudOption = {
-        title: {
-            text: '与Java相关的Tag词云图',
-            textStyle: {
-                // fontStyle: 'oblique',
-                fontSize: 20,
-                color: '#4cc9f0'
-            },
-            left: 'center'
+  let piechart = echarts.init(document.getElementById('piechart'));
+  let piechartData = [];
+  for (const key in piechartRaw) {
+    piechartData.push({
+      name: key,
+      value: piechartRaw[key]
+    });
+  }
+  let pieOption = {
+    title: {
+      text: '问题的回答数量',  // 这数据是写死在piechart-demo.js的。我不确定它是什么意思，而且和getPercent的数据好像有点矛盾。
+      textStyle: {
+        // fontStyle: 'oblique',
+        fontSize: 20,
+        color: '#4cc9f0'
+      },
+      left: 'center'
+    },
+    tooltip: {
+      formatter: '{b}个回答：{c}%',
+      trigger: 'item'
+    },
+    grid: {
+      width: '100%',
+      height: '100%'
+    },
+    series: [
+      {
+        type: 'pie',
+        radius: '70%',
+        data: piechartData,
+        color: ['#D0D0D0', '#A9A9A9', '#808080', '#696969',
+          '#454545', '#333333', '#1F1F1F', '#000000'],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0.1, 0.2, 0, 0.5)',
+          }
         },
-        tooltip: {formatter: '{c}个问题带有tag {b}',},
-        series: [{
-            type: 'wordCloud',
-            shape: {
-              cloudGrow: 0.2
-            },
-            sizeRange: [10, 60],
-            rotationRange: [-30, 30],
-            gridSize: 2,
-            drawOutOfBound: false,
-            layoutAnimation: true,
-            keepAspect: true,
-            textStyle: {
-                fontWeight: 'bold',
-                color: function () {
-                    return 'rgb(' + [
-                        Math.round(Math.random() * 160),
-                        Math.round(Math.random() * 160),
-                        Math.round(Math.random() * 160)
-                    ].join(',') + ')';
-                }
-            },
-            emphasis: {
-                textStyle: {
-                    shadowBlur: 15,
-                    shadowColor: '#333'
-                }
-            },
-            data: wordcloudData.sort(function (a, b) {
-                return b.value - a.value;
-            })
-        }]
-    };
-    wordcloud.setOption(wordcloudOption);
-
-    let piechart = echarts.init(document.getElementById('piechart'));
-    let piechartData = [];
-    for (const key in piechartRaw) {
-        piechartData.push({
-            name: key,
-            value: piechartRaw[key]
-        });
-    }
-    let pieOption = {
-        title: {
-            text: '问题的回答数量',  // 这数据是写死在piechart-demo.js的。我不确定它是什么意思，而且和getPercent的数据好像有点矛盾。
-            textStyle: {
-                // fontStyle: 'oblique',
-                fontSize: 20,
-                color: '#4cc9f0'
-            },
-            left: 'center'
-        },
-        tooltip: {
-            formatter: '{b}个回答：{c}%',
-            trigger: 'item'
-        },
-        grid: {
-            width: '100%',
-            height: '100%'
-        },
-        series: [
-            {
-                type: 'pie',
-                radius: '70%',
-                data: piechartData,
-                color: ['#D0D0D0', '#A9A9A9', '#808080', '#696969',
-                    '#454545', '#333333', '#1F1F1F', '#000000'],
-                emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0.1, 0.2, 0, 0.5)',
-                    }
-                },
-                itemStyle: {
-                    normal: {
-                        label: {
-                            textStyle: {
-                                fontSize: 12,
-                                color: 'black'
-                            }
-                        }
-                    }
-                }
+        itemStyle: {
+          normal: {
+            label: {
+              textStyle: {
+                fontSize: 12,
+                color: 'black'
+              }
             }
-        ]
-    };
-    piechart.setOption(pieOption);
+          }
+        }
+      }
+    ]
+  };
+  piechart.setOption(pieOption);
 
+  var chartDom = document.getElementById('soomthedline');
+  var myChart = echarts.init(chartDom);
+  var option;
 
-    var chartDom = document.getElementById('soomthedline');
-    var myChart = echarts.init(chartDom);
-    var option;
-
-    option = {
-        title: {
-            text: '一周七天新增的回答数量',  // 我觉得这个数据完全不对，根本不是一周7天
-            textStyle: {
-                // fontStyle: 'oblique',
-                fontSize: 20,
-                color: '#4cc9f0'
-            },
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        },
-        yAxis: {
-            type: 'value'
-        },
-        series: [
-            {
-                label:{show:true,},
-                data: shuzu,
-                type: 'line',
-                smooth: true
-            }
-        ]
-    };
-    myChart.setOption(option);
+  option = {
+    title: {
+      text: '一周七天新增的回答数量',  // 我觉得这个数据完全不对，根本不是一周7天
+      textStyle: {
+        // fontStyle: 'oblique',
+        fontSize: 20,
+        color: '#4cc9f0'
+      },
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [
+      {
+        label: {show: true,},
+        data: shuzu,
+        type: 'line',
+        smooth: true
+      }
+    ]
+  };
+  myChart.setOption(option);
 
 </script>
 

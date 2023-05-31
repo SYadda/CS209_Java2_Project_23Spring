@@ -1,53 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>用户活跃度</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
-    <style>
-        body {
-            background-image: url(../img/背景.png);
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            background-size:100% 100%;
-        }
+  <meta charset="UTF-8">
+  <title>用户活跃度</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src='https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js'></script>
+  <style>
+    body {
+      background-image: url(../img/背景.png);
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-size: 100% 100%;
+    }
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        .button {
-            display: inline-block;
-            margin: 10px;
-            padding: 15px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            text-decoration: none;
-            color: #fff;
-            background-color: #007bff;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
+    .button {
+      display: inline-block;
+      margin: 10px;
+      padding: 15px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      text-decoration: none;
+      color: #fff;
+      background-color: #007bff;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
 
-        .button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    .button:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-<div style="width: 1500px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto">
-    <div id="answerUser" style="width: 50%;height: 100%"></div>
-    <div id="commentUser" style="width: 50%;height: 100%"></div>
-    <div id="ansTop10" style="width: 50%;height: 100%"></div>
-    <div id="comTop10" style="width: 50%;height: 100%"></div>
-    <div id="answerThead" style="width: 50%;height: 100%"></div>
-    <div id="commentThead" style="width: 50%;height: 100%"></div>
+<div
+    style="width: 1500px;height: 60vh;display: flex; flex-wrap: wrap; align-content: flex-start; margin: 0 auto">
+  <div id="answerUser" style="width: 50%;height: 100%"></div>
+  <div id="commentUser" style="width: 50%;height: 100%"></div>
+  <div id="ansTop10" style="width: 50%;height: 100%"></div>
+  <div id="comTop10" style="width: 50%;height: 100%"></div>
+  <div id="answerThead" style="width: 50%;height: 100%"></div>
+  <div id="commentThead" style="width: 50%;height: 100%"></div>
 </div>
 <input id="au" type="hidden" th:value="${answerUser}">
 <input id="cu" type="hidden" th:value="${commentUser}">
@@ -59,221 +60,221 @@
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <div class="button-container" style="justify-content: center;">
-    <a class="button" href="content" style="justify-content: center">返回目录</a>
+  <a class="button" href="content" style="justify-content: center">返回目录</a>
 </div>
 
 </body>
 
 <script>
-    let json = JSON.parse($('#au').val());
-    let xRom = [];
-    let yRom = [];
-    for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
-    }
-    echarts.init(document.getElementById('answerUser')).setOption({
-        title: {
-            text: '用户回答的问题数量',
-            subtext: '在同一个问题中多次回答，仅统计一次',
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            // boundaryGap: false // 两边留白，默认为true
-            data: xRom,
-            axisLabel: {interval: 0, formatter: '{value} 个问题'}
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 人'}
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: '回答{b}个问题的用户：{c}人',
-            axisPointer: {type: 'shadow'}
-        },
-        series: [{
-            data: yRom,
-            type: 'bar',
-            areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
-        }]
-    });
+  let json = JSON.parse($('#au').val());
+  let xRom = [];
+  let yRom = [];
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  echarts.init(document.getElementById('answerUser')).setOption({
+    title: {
+      text: '用户回答的问题数量',
+      subtext: '在同一个问题中多次回答，仅统计一次',
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      // boundaryGap: false // 两边留白，默认为true
+      data: xRom,
+      axisLabel: {interval: 0, formatter: '{value} 个问题'}
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {formatter: '{value} 人'}
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '回答{b}个问题的用户：{c}人',
+      axisPointer: {type: 'shadow'}
+    },
+    series: [{
+      data: yRom,
+      type: 'bar',
+      areaStyle: {},
+      label: {show: true, formatter: '{c}', position: 'top'}
+    }]
+  });
 
-    json = JSON.parse($('#cu').val());
-    xRom = [];
-    yRom = [];
-    for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
-    }
-    echarts.init(document.getElementById('commentUser')).setOption({
-        title: {
-            text: '用户参与评论的问题数量',
-            subtext: '在同一个问题中多次评论，仅统计一次',
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 1, formatter: '{value} 个问题'}
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 人'}
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: '参与评论{b}个问题的用户：{c}人',
-            axisPointer: {type: 'shadow'}
-        },
-        series: [{
-            data: yRom,
-            type: 'bar',
-            areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
-        }]
-    });
+  json = JSON.parse($('#cu').val());
+  xRom = [];
+  yRom = [];
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  echarts.init(document.getElementById('commentUser')).setOption({
+    title: {
+      text: '用户参与评论的问题数量',
+      subtext: '在同一个问题中多次评论，仅统计一次',
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      data: xRom,
+      axisLabel: {interval: 1, formatter: '{value} 个问题'}
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {formatter: '{value} 人'}
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '参与评论{b}个问题的用户：{c}人',
+      axisPointer: {type: 'shadow'}
+    },
+    series: [{
+      data: yRom,
+      type: 'bar',
+      areaStyle: {},
+      label: {show: true, formatter: '{c}', position: 'top'}
+    }]
+  });
 
-    json = JSON.parse($('#aTop').val());
-    xRom = [];
-    yRom = [];
-    for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
-    }
-    echarts.init(document.getElementById('ansTop10')).setOption({
-        title: {
-            text: '回答问题最活跃的10位用户',
-            subtext: '在同一个问题中多次回答，仅统计一次',
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 0, formatter: '{value}', rotate: -45} // margin: 5 //刻度标签与轴线之间的距离
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 个问题'}
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: '{b}回答了{c}个问题',
-            axisPointer: {type: 'shadow'}
-        },
-        series: [{
-            realtimeSort: true,
-            data: yRom,
-            type: 'bar',
-            areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
-        }]
-    });
+  json = JSON.parse($('#aTop').val());
+  xRom = [];
+  yRom = [];
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  echarts.init(document.getElementById('ansTop10')).setOption({
+    title: {
+      text: '回答问题最活跃的10位用户',
+      subtext: '在同一个问题中多次回答，仅统计一次',
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      data: xRom,
+      axisLabel: {interval: 0, formatter: '{value}', rotate: -45} // margin: 5 //刻度标签与轴线之间的距离
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {formatter: '{value} 个问题'}
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '{b}回答了{c}个问题',
+      axisPointer: {type: 'shadow'}
+    },
+    series: [{
+      realtimeSort: true,
+      data: yRom,
+      type: 'bar',
+      areaStyle: {},
+      label: {show: true, formatter: '{c}', position: 'top'}
+    }]
+  });
 
-    json = JSON.parse($('#cTop').val());
-    xRom = [];
-    yRom = [];
-    for (const key in json) {
-        xRom[xRom.length] = key;
-        yRom[yRom.length] = json[key];
-    }
-    echarts.init(document.getElementById('comTop10')).setOption({
-        title: {
-            text: '发表评论最活跃的10位用户',
-            subtext: '在同一个问题中多次评论，仅统计一次',
-            left: 'center'
-        },
-        xAxis: {
-            type: 'category',
-            data: xRom,
-            axisLabel: {interval: 0, formatter: '{value}', rotate: -45} // margin: 5 //刻度标签与轴线之间的距离
-        },
-        yAxis: {
-            type: 'value',
-            axisLabel: {formatter: '{value} 个问题'}
-        },
-        tooltip: {
-            trigger: 'axis',
-            formatter: '{b}在{c}个问题下发表了评论',
-            axisPointer: {type: 'shadow'}
-        },
-        series: [{
-            realtimeSort: true,
-            data: yRom,
-            type: 'bar',
-            areaStyle: {},
-            label:{show:true, formatter: '{c}', position: 'top'}
-        }]
-    });
+  json = JSON.parse($('#cTop').val());
+  xRom = [];
+  yRom = [];
+  for (const key in json) {
+    xRom[xRom.length] = key;
+    yRom[yRom.length] = json[key];
+  }
+  echarts.init(document.getElementById('comTop10')).setOption({
+    title: {
+      text: '发表评论最活跃的10位用户',
+      subtext: '在同一个问题中多次评论，仅统计一次',
+      left: 'center'
+    },
+    xAxis: {
+      type: 'category',
+      data: xRom,
+      axisLabel: {interval: 0, formatter: '{value}', rotate: -45} // margin: 5 //刻度标签与轴线之间的距离
+    },
+    yAxis: {
+      type: 'value',
+      axisLabel: {formatter: '{value} 个问题'}
+    },
+    tooltip: {
+      trigger: 'axis',
+      formatter: '{b}在{c}个问题下发表了评论',
+      axisPointer: {type: 'shadow'}
+    },
+    series: [{
+      realtimeSort: true,
+      data: yRom,
+      type: 'bar',
+      areaStyle: {},
+      label: {show: true, formatter: '{c}', position: 'top'}
+    }]
+  });
 
-    json = JSON.parse($('#at').val());
-    let dat = [];
-    for (const key in json) {
-        dat.push({name: key, value: json[key]})
-    }
-    echarts.init(document.getElementById('answerThead')).setOption({
-        title: {
-            text: '问题的回答人数',
-            subtext: '一位用户在同一个问题中多次回答，仅统计一次',
-            left: 'center'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '有{b}人评论的问题：{c}个，{d}%'
-        },
-        series: [{
-            data: dat,
-            type: 'pie',
-            radius: ['50%','70%'],
-            areaStyle: {},
-            avoidLabelOverlap: false,
-            label: {show: false, position: 'center'},
-            labelLine: {show: false},
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 60,
-                    fontWeight: 'bold',
-                    formatter: '{b}人'
-                }
-            }
-        }]
-    });
+  json = JSON.parse($('#at').val());
+  let dat = [];
+  for (const key in json) {
+    dat.push({name: key, value: json[key]})
+  }
+  echarts.init(document.getElementById('answerThead')).setOption({
+    title: {
+      text: '问题的回答人数',
+      subtext: '一位用户在同一个问题中多次回答，仅统计一次',
+      left: 'center'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '有{b}人评论的问题：{c}个，{d}%'
+    },
+    series: [{
+      data: dat,
+      type: 'pie',
+      radius: ['50%', '70%'],
+      areaStyle: {},
+      avoidLabelOverlap: false,
+      label: {show: false, position: 'center'},
+      labelLine: {show: false},
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 60,
+          fontWeight: 'bold',
+          formatter: '{b}人'
+        }
+      }
+    }]
+  });
 
-    json = JSON.parse($('#ct').val());
-    dat = [];
-    for (const key in json) {
-        dat.push({name: key, value: json[key]})
-    }
-    echarts.init(document.getElementById('commentThead')).setOption({
-        title: {
-            text: '问题的评论人数',
-            subtext: '一位用户在同一个问题中多次评论，仅统计一次',
-            left: 'center'
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: '有{b}人评论的问题：{c}个，{d}%'
-        },
-        series: [{
-            data: dat,
-            type: 'pie',
-            radius: ['50%','70%'],
-            areaStyle: {},
-            avoidLabelOverlap: false,
-            label: {show: false, position: 'center'},
-            labelLine: {show: false},
-            emphasis: {
-                label: {
-                    show: true,
-                    fontSize: 60,
-                    fontWeight: 'bold',
-                    formatter: '{b}人'
-                }
-            }
-        }]
-    });
+  json = JSON.parse($('#ct').val());
+  dat = [];
+  for (const key in json) {
+    dat.push({name: key, value: json[key]})
+  }
+  echarts.init(document.getElementById('commentThead')).setOption({
+    title: {
+      text: '问题的评论人数',
+      subtext: '一位用户在同一个问题中多次评论，仅统计一次',
+      left: 'center'
+    },
+    tooltip: {
+      trigger: 'item',
+      formatter: '有{b}人评论的问题：{c}个，{d}%'
+    },
+    series: [{
+      data: dat,
+      type: 'pie',
+      radius: ['50%', '70%'],
+      areaStyle: {},
+      avoidLabelOverlap: false,
+      label: {show: false, position: 'center'},
+      labelLine: {show: false},
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: 60,
+          fontWeight: 'bold',
+          formatter: '{b}人'
+        }
+      }
+    }]
+  });
 </script>
 </html>
